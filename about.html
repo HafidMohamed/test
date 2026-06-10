@@ -1,35 +1,258 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Über uns — Meine Testseite</title>
+  <title>About Us — Kaffeerösterei Kreuzau</title>
+  <meta name="description" content="Learn about our story, our team, and our commitment to exceptional specialty coffee since 1998.">
+  <meta property="og:title" content="About Us — Kaffeerösterei Kreuzau">
+  <meta property="og:description" content="Our story, our team, and our passion for exceptional coffee since 1998.">
+  <meta property="og:image" content="https://picsum.photos/id/1076/1200/630">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About Kaffeerösterei Kreuzau",
+    "description": "Family-run specialty coffee roastery founded in Kreuzau in 1998. We source ethically, roast carefully, and ship fresh.",
+    "url": "https://xn--kaffeerstreikreuzau-w6b.de/about.html",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Kaffeerösterei Kreuzau",
+      "foundingDate": "1998",
+      "description": "Award-winning specialty coffee roaster based in Kreuzau, Germany."
+    }
+  }
+  </script>
+
   <style>
-    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; }
-    nav a { margin-right: 20px; text-decoration: none; color: #333; font-weight: 500; }
-    nav { margin-bottom: 40px; border-bottom: 1px solid #eee; padding-bottom: 16px; }
-    h1 { color: #1a1a2e; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a1a1a; background: #fafafa; }
+    a { color: #5d4037; text-decoration: none; }
+    nav { background: #3e2723; padding: 0 24px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    nav .brand { color: #fff; font-size: 1.1rem; font-weight: 700; padding: 18px 0; margin-right: auto; }
+    nav a { color: #efebe9; padding: 18px 16px; font-size: .95rem; display: inline-block; }
+    nav a:hover { color: #fff; background: rgba(255,255,255,.1); text-decoration: none; }
+    .page-header { position: relative; overflow: hidden; height: 360px; }
+    .page-header img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .page-header-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(20,10,5,.75) 40%, transparent);
+      display: flex; align-items: center; padding: 0 60px;
+    }
+    .page-header-text { max-width: 500px; color: #fff; }
+    .page-header-text h1 { font-size: 2.4rem; margin-bottom: 12px; }
+    .page-header-text p { font-size: 1.1rem; opacity: .88; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 56px 0; }
+    h2 { font-size: 1.8rem; color: #3e2723; margin-bottom: 10px; }
+    h3 { font-size: 1.15rem; color: #4e342e; margin-bottom: 6px; }
+    p { line-height: 1.75; color: #4a3728; margin-bottom: 12px; }
+    .test-label { font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border-radius: 4px; padding: 2px 8px; display: inline-block; margin-bottom: 8px; }
+    .translates  { background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; }
+    .no-translate { background: #fce4ec; color: #880e4f; border: 1px solid #f48fb1; }
+    .media-swap   { background: #e3f2fd; color: #0d47a1; border: 1px solid #90caf9; }
+    .alert { border-radius: 8px; padding: 14px 18px; margin: 16px 0; font-size: .93rem; }
+    .alert-info { background: #e3f2fd; border-left: 4px solid #1976d2; color: #0d47a1; }
+    .alert-info code { background: rgba(0,0,0,.07); padding: 1px 5px; border-radius: 3px; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+    @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+    .two-col img { width: 100%; border-radius: 12px; object-fit: cover; max-height: 380px; display: block; }
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; margin-top: 24px; }
+    .team-card { background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,.08); text-align: center; padding-bottom: 20px; }
+    .team-card img { width: 100%; height: 220px; object-fit: cover; display: block; }
+    .team-card h3 { margin-top: 14px; padding: 0 16px; }
+    .team-card .role { color: #bf360c; font-size: .9rem; font-weight: 600; margin-bottom: 6px; padding: 0 16px; }
+    .team-card p { font-size: .88rem; padding: 0 16px; color: #666; }
+    .timeline { border-left: 3px solid #bf360c; padding-left: 24px; margin-top: 24px; }
+    .timeline-item { position: relative; margin-bottom: 28px; }
+    .timeline-item::before { content: ''; position: absolute; left: -31px; top: 6px; width: 14px; height: 14px; border-radius: 50%; background: #bf360c; border: 3px solid #fff; box-shadow: 0 0 0 2px #bf360c; }
+    .timeline-item .year { font-size: .85rem; font-weight: 700; color: #bf360c; margin-bottom: 4px; }
+    .award-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-top: 20px; }
+    .award-card { background: #fff; border-radius: 10px; padding: 18px 20px; border: 1px solid #e0e0e0; display: flex; gap: 14px; align-items: flex-start; }
+    .award-card img { width: 56px; height: 56px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+    hr { border: none; border-top: 1px solid #e0e0e0; margin: 36px 0; }
+    blockquote { border-left: 4px solid #bf360c; padding: 12px 20px; margin: 20px 0; background: #fff8f6; border-radius: 0 8px 8px 0; }
+    blockquote p { color: #5d2110; font-style: italic; margin: 0 0 8px; }
+    blockquote cite { font-size: .85rem; color: #888; }
+    footer { background: #3e2723; color: #efebe9; text-align: center; padding: 28px 24px; font-size: .9rem; }
   </style>
-  <link rel="alternate" hreflang="de" href="https://xn--kaffeerstreikreuzau-w6b.de/">
-<link rel="alternate" hreflang="it" href="https://it.xn--kaffeerstreikreuzau-w6b.de/">
-<link rel="alternate" hreflang="es" href="https://es.xn--kaffeerstreikreuzau-w6b.de/">
-<link rel="alternate" hreflang="x-default" href="https://xn--kaffeerstreikreuzau-w6b.de/">
-<script src="https://cdn.kaffeekreuzau.de/public/widget.js" defer></script>
-  </head>
+</head>
 <body>
-  <nav>
-    <a href="/index.html">Startseite</a>
-    <a href="/about.html">Über uns</a>
-    <a href="/products.html">Produkte</a>
-    <a href="/contact.html">Kontakt</a>
-  </nav>
-  <h1>Über unser Unternehmen</h1>
-  <p>Wir wurden im Jahr 2010 gegründet und haben seitdem über 50.000 zufriedene Kunden bedient. Unser Team besteht aus 25 erfahrenen Mitarbeitern, die sich täglich für Ihre Zufriedenheit einsetzen.</p>
-  <h2>Unsere Geschichte</h2>
-  <p>Was als kleines Familienunternehmen begann, ist heute ein modernes Unternehmen mit bundesweitem Versand. Wir legen großen Wert auf Nachhaltigkeit und faire Arbeitsbedingungen.</p>
-  <h2>Unser Team</h2>
-  <p>Unser engagiertes Team steht Ihnen bei Fragen und Problemen gerne zur Verfügung. Wir sprechen Deutsch, Englisch und Türkisch.</p>
-  <h2>Auszeichnungen</h2>
-  <p>Im Jahr 2022 wurden wir mit dem Deutschen Qualitätspreis für hervorragenden Kundenservice ausgezeichnet. Diese Auszeichnung motiviert uns, täglich besser zu werden.</p>
+
+<nav>
+  <span class="brand">☕ Kaffeerösterei Kreuzau</span>
+  <a href="index.html">Home</a>
+  <a href="products.html">Products</a>
+  <a href="about.html">About Us</a>
+  <a href="contact.html">Contact</a>
+</nav>
+
+<!-- Page header with media-map image -->
+<!--
+  MEDIA MAP: Dashboard → Media → Add Replacement
+  Original: https://picsum.photos/id/1076/1400/360
+  DE → https://picsum.photos/id/431/1400/360
+  IT → https://picsum.photos/id/493/1400/360
+  ES → https://picsum.photos/id/1035/1400/360
+-->
+<div class="page-header">
+  <img src="https://picsum.photos/id/1076/1400/360" alt="The interior of Kaffeerösterei Kreuzau showing the roasting drum and fresh beans" loading="eager">
+  <div class="page-header-overlay">
+    <div class="page-header-text">
+      <h1>Our Story</h1>
+      <p>A family-run roastery in Kreuzau since 1998 — built on curiosity, craft, and the pursuit of the perfect cup.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Origin story ══ -->
+<section style="background:#fff;">
+  <div class="container">
+    <span class="test-label translates">✅ All text translates — full paragraphs</span>
+    <div class="two-col">
+      <div>
+        <h2>From a Garage to Germany's Most Loved Roastery</h2>
+        <p>It started in 1998 when founder <strong translate="no">Heinrich Bauer</strong> converted his garage into a tiny roastery with a 5-kg drum roaster he'd bought second-hand from a retiring Swiss roastmaster.</p>
+        <p>Twenty-six years later, <span translate="no">Kaffeerösterei Kreuzau</span> roasts over 8 tonnes of coffee per month, employs 14 people, and ships to customers across 22 countries. But the philosophy hasn't changed: source ethically, roast carefully, ship fresh.</p>
+        <p>We cup every batch before it leaves the roastery. If it doesn't meet our standard, it doesn't ship. Simple as that.</p>
+        <blockquote>
+          <p>"Coffee is an agricultural product. The terroir, the harvest, the processing — they all matter. Our job is to bring that story to the cup without getting in the way."</p>
+          <cite>— Heinrich Bauer, Founder &amp; Head Roaster</cite>
+        </blockquote>
+      </div>
+      <!-- Different image per language via media map -->
+      <img
+        src="https://picsum.photos/id/493/600/400"
+        alt="Heinrich Bauer inspecting freshly roasted coffee beans at the roastery"
+        loading="lazy"
+        title="Founder Heinrich Bauer at work"
+      >
+    </div>
+  </div>
+</section>
+
+<!-- ══ Team ══ -->
+<section style="background:#f5f5f5;">
+  <div class="container">
+    <span class="test-label translates">✅ Team descriptions translate</span>
+    <span class="test-label media-swap" style="margin-left:8px;">🔄 Team photos can be swapped per language</span>
+    <h2>Meet the Team</h2>
+    <p>Fourteen people work at the roastery. Here are the faces you'll interact with most.</p>
+
+    <div class="alert alert-info">
+      Media map: team photos are a common use case — for a regional website you might swap a German-language team photo for a local version.<br>
+      Original: <code>https://picsum.photos/id/1005/400/440</code> → DE: <code>https://picsum.photos/id/1072/400/440</code>
+    </div>
+
+    <div class="team-grid">
+      <div class="team-card">
+        <img src="https://picsum.photos/id/1005/400/440" alt="Portrait of Heinrich Bauer, founder and head roaster" loading="lazy">
+        <h3 translate="no">Heinrich Bauer</h3>
+        <div class="role">Founder &amp; Head Roaster</div>
+        <p>26 years roasting. Trained in Switzerland and Colombia. Spends two months per year visiting origin farms.</p>
+      </div>
+      <div class="team-card">
+        <img src="https://picsum.photos/id/1011/400/440" alt="Portrait of Marta Schneider, head of quality control" loading="lazy">
+        <h3 translate="no">Marta Schneider</h3>
+        <div class="role">Head of Quality Control</div>
+        <p>Q-grader certified. Cups over 200 batches per year and works directly with our green-coffee importer.</p>
+      </div>
+      <div class="team-card">
+        <img src="https://picsum.photos/id/1025/400/440" alt="Portrait of Jonas Wegner, barista trainer and education lead" loading="lazy">
+        <h3 translate="no">Jonas Wegner</h3>
+        <div class="role">Barista Trainer &amp; Education</div>
+        <p>SCA-certified trainer. Runs monthly brewing workshops at the roastery and writes the monthly tasting notes newsletter.</p>
+      </div>
+      <div class="team-card">
+        <img src="https://picsum.photos/id/177/400/440" alt="Portrait of Lena Fischer, responsible for customer orders and dispatch" loading="lazy">
+        <h3 translate="no">Lena Fischer</h3>
+        <div class="role">Customer Orders &amp; Dispatch</div>
+        <p>Packs and ships every single order with care. Lena is also responsible for all subscription customers and their preferences.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Timeline ══ -->
+<section style="background:#fff;">
+  <div class="container" style="max-width:720px;">
+    <span class="test-label translates">✅ Timeline content translates</span>
+    <h2>Our Timeline</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="year">1998</div>
+        <h3>The garage roastery</h3>
+        <p>Heinrich Bauer buys a 5-kg drum roaster and starts roasting for friends and the local weekly market in Kreuzau.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2003</div>
+        <h3>First commercial premises</h3>
+        <p>After five years of market sales, we move into our first commercial space on Rurstraße with a 25-kg Probat roaster.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2009</div>
+        <h3>First origin trip</h3>
+        <p>Heinrich visits coffee farms in Colombia for the first time, establishing direct-trade relationships that still exist today.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2015</div>
+        <h3>Online shop launch</h3>
+        <p>We launch our online shop and start shipping across Germany. Within 12 months we're shipping to 8 European countries.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2021</div>
+        <h3>Expansion &amp; new 60-kg roaster</h3>
+        <p>We install a 60-kg Loring Smart Roast roaster, doubling our capacity while reducing energy consumption by 30%.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2024</div>
+        <h3>Multilingual storefront</h3>
+        <p>We launch translated storefronts for Italian, Spanish, and French visitors via our new translation proxy — the page you're reading right now is part of that rollout.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Awards ══ -->
+<section style="background:#f5f5f5;">
+  <div class="container">
+    <span class="test-label translates">✅ Award descriptions translate</span>
+    <span class="test-label no-translate" style="margin-left:8px;">❌ Award organisation names — add as text exclusion</span>
+    <h2>Awards &amp; Recognition</h2>
+
+    <div class="award-grid">
+      <div class="award-card">
+        <img src="https://picsum.photos/id/134/100/100" alt="Gold medal award badge" loading="lazy">
+        <div>
+          <h3>Best German Roastery 2023</h3>
+          <p translate="no">Deutsche Rösterei-Meisterschaft</p>
+          <p style="font-size:.85rem;color:#666;">Gold medal — espresso category. Third consecutive year placing in the top three.</p>
+        </div>
+      </div>
+      <div class="award-card">
+        <img src="https://picsum.photos/id/116/100/100" alt="Silver trophy award" loading="lazy">
+        <div>
+          <h3>Specialty Coffee Association Excellence Award 2022</h3>
+          <p translate="no">SCA Nordic Chapter</p>
+          <p style="font-size:.85rem;color:#666;">Recognised for outstanding transparency in supply-chain reporting and direct-trade practices.</p>
+        </div>
+      </div>
+      <div class="award-card">
+        <img src="https://picsum.photos/id/145/100/100" alt="Organic certification seal" loading="lazy">
+        <div>
+          <h3>Organic Certification 2019–present</h3>
+          <p translate="no">Bioland e.V.</p>
+          <p style="font-size:.85rem;color:#666;">Our entire Ethiopia and Guatemala range is fully certified organic under Bioland standards.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2024 Kaffeerösterei Kreuzau · Rurstraße 12, 52372 Kreuzau, Germany</p>
+</footer>
+
 </body>
 </html>

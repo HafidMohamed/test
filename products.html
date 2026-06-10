@@ -1,57 +1,373 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Produkte — Meine Testseite</title>
+  <title>Our Coffee Products — Kaffeerösterei Kreuzau</title>
+  <meta name="description" content="Browse our full range of single-origin and blended coffees. Roasted fresh every week and shipped directly to your door.">
+  <meta property="og:title" content="Our Coffee Products — Kaffeerösterei Kreuzau">
+  <meta property="og:description" content="Single-origin espresso, filter, and specialty coffees roasted fresh in Kreuzau.">
+  <meta property="og:image" content="https://picsum.photos/id/431/1200/630">
+
+  <!-- Product list JSON-LD — name/description translate; url/@id/image do NOT -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Coffee Products",
+    "description": "Our complete range of freshly roasted specialty coffees",
+    "itemListElement": [
+      {
+        "@type": "ListItem", "position": 1,
+        "item": {
+          "@type": "Product",
+          "name": "Espresso Classico",
+          "description": "A rich, full-bodied dark roast with notes of dark chocolate and caramel.",
+          "image": "https://picsum.photos/id/30/600/400",
+          "sku": "ESP-CLS-250",
+          "offers": { "@type": "Offer", "priceCurrency": "EUR", "price": "12.90" }
+        }
+      },
+      {
+        "@type": "ListItem", "position": 2,
+        "item": {
+          "@type": "Product",
+          "name": "Ethiopia Yirgacheffe",
+          "description": "Bright and floral light roast with jasmine, bergamot, and blueberry notes.",
+          "image": "https://picsum.photos/id/225/600/400",
+          "sku": "ETH-YRG-250",
+          "offers": { "@type": "Offer", "priceCurrency": "EUR", "price": "14.50" }
+        }
+      }
+    ]
+  }
+  </script>
+
   <style>
-    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; }
-    nav a { margin-right: 20px; text-decoration: none; color: #333; font-weight: 500; }
-    nav { margin-bottom: 40px; border-bottom: 1px solid #eee; padding-bottom: 16px; }
-    h1 { color: #1a1a2e; }
-    .product { border: 1px solid #ddd; padding: 20px; border-radius: 8px; margin: 16px 0; }
-    .price { font-size: 1.4em; font-weight: bold; color: #e63946; }
-    .badge { display: inline-block; background: #2a9d8f; color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.8em; margin-bottom: 8px; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a1a1a; background: #fafafa; }
+    a { color: #5d4037; text-decoration: none; }
+    nav { background: #3e2723; padding: 0 24px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    nav .brand { color: #fff; font-size: 1.1rem; font-weight: 700; padding: 18px 0; margin-right: auto; }
+    nav a { color: #efebe9; padding: 18px 16px; font-size: .95rem; display: inline-block; }
+    nav a:hover { color: #fff; background: rgba(255,255,255,.1); text-decoration: none; }
+    .page-header { background: #3e2723; color: #fff; padding: 48px 24px; text-align: center; }
+    .page-header h1 { font-size: 2.2rem; margin-bottom: 10px; }
+    .page-header p { font-size: 1.1rem; opacity: .85; max-width: 600px; margin: 0 auto; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 48px 0; }
+    h2 { font-size: 1.7rem; color: #3e2723; margin-bottom: 8px; }
+    h3 { font-size: 1.15rem; color: #4e342e; margin-bottom: 6px; }
+    p { line-height: 1.7; color: #4a3728; margin-bottom: 10px; }
+    .test-label { font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border-radius: 4px; padding: 2px 8px; display: inline-block; margin-bottom: 6px; }
+    .translates  { background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; }
+    .no-translate { background: #fce4ec; color: #880e4f; border: 1px solid #f48fb1; }
+    .media-swap   { background: #e3f2fd; color: #0d47a1; border: 1px solid #90caf9; }
+    .alert { border-radius: 8px; padding: 14px 18px; margin: 16px 0; font-size: .93rem; }
+    .alert-info { background: #e3f2fd; border-left: 4px solid #1976d2; color: #0d47a1; }
+    .alert-info code { background: rgba(0,0,0,.07); padding: 1px 5px; border-radius: 3px; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px; margin-top: 24px; }
+    .product-card { background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,.09); }
+    .product-card img { width: 100%; height: 220px; object-fit: cover; display: block; }
+    .product-body { padding: 22px; }
+    .product-meta { display: flex; justify-content: space-between; align-items: baseline; margin-top: 12px; }
+    .price { font-size: 1.4rem; font-weight: 700; color: #bf360c; }
+    .sku { font-size: .78rem; color: #9e9e9e; font-family: monospace; }
+    .badge { display: inline-block; font-size: .72rem; font-weight: 700; border-radius: 12px; padding: 2px 10px; margin-bottom: 8px; }
+    .badge-light  { background: #fff9c4; color: #f57f17; border: 1px solid #f9a825; }
+    .badge-medium { background: #fff3e0; color: #bf360c; border: 1px solid #ffb74d; }
+    .badge-dark   { background: #3e2723; color: #d7ccc8; }
+    .add-btn { display: block; width: 100%; margin-top: 14px; background: #3e2723; color: #fff; border: none; padding: 11px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+    .add-btn:hover { background: #4e342e; }
+    .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; padding-top: 16px; }
+    .filter-btn { background: #fff; border: 1px solid #bdbdbd; border-radius: 20px; padding: 6px 18px; font-size: .9rem; cursor: pointer; }
+    .filter-btn.active { background: #3e2723; color: #fff; border-color: #3e2723; }
+    .origin-badge { font-size: .75rem; color: #78909c; margin-bottom: 6px; }
+    .flavor-tags { margin-top: 8px; }
+    .flavor-tag { display: inline-block; background: #f5f5f5; border-radius: 12px; padding: 2px 10px; font-size: .78rem; color: #555; margin: 2px; }
+    table.brew-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    table.brew-table th, table.brew-table td { padding: 9px 14px; text-align: left; border-bottom: 1px solid #eee; font-size: .9rem; }
+    table.brew-table th { background: #efebe9; color: #3e2723; }
+    hr { border: none; border-top: 1px solid #e0e0e0; margin: 36px 0; }
+    footer { background: #3e2723; color: #efebe9; text-align: center; padding: 28px 24px; font-size: .9rem; }
   </style>
-  <link rel="alternate" hreflang="de" href="https://xn--kaffeerstreikreuzau-w6b.de/">
-<link rel="alternate" hreflang="it" href="https://it.xn--kaffeerstreikreuzau-w6b.de/">
-<link rel="alternate" hreflang="es" href="https://es.xn--kaffeerstreikreuzau-w6b.de/">
-<link rel="alternate" hreflang="x-default" href="https://xn--kaffeerstreikreuzau-w6b.de/">
-<script src="https://cdn.kaffeekreuzau.de/public/widget.js" defer></script>
 </head>
 <body>
-  <nav>
-    <a href="/index.html">Startseite</a>
-    <a href="/about.html">Über uns</a>
-    <a href="/products.html">Produkte</a>
-    <a href="/contact.html">Kontakt</a>
-  </nav>
-  <h1>Unsere Produkte</h1>
-  <div class="product">
-    <span class="badge">Bestseller</span>
-    <h2>Premium Kaffeemaschine</h2>
-    <p>Vollautomatische Kaffeemaschine mit integriertem Mahlwerk. Ideal für den täglichen Gebrauch zuhause oder im Büro. Macht bis zu 12 Tassen pro Stunde.</p>
-    <p class="price">149,99 €</p>
-    <p><strong>Auf Lager</strong> — Lieferung in 2 Werktagen</p>
+
+<nav>
+  <span class="brand">☕ Kaffeerösterei Kreuzau</span>
+  <a href="index.html">Home</a>
+  <a href="products.html">Products</a>
+  <a href="about.html">About Us</a>
+  <a href="contact.html">Contact</a>
+</nav>
+
+<div class="page-header">
+  <h1>Our Coffee Range</h1>
+  <p>Freshly roasted single-origin and blended coffees — sourced responsibly, roasted carefully, shipped fast.</p>
+</div>
+
+<!-- ══ PRODUCT GRID with media-map images per language ══ -->
+<section style="background:#fafafa;">
+  <div class="container">
+
+    <span class="test-label translates">✅ All product text translates</span>
+    <span class="test-label media-swap" style="margin-left:8px;">🔄 Each product image can be swapped per language</span>
+
+    <div class="alert alert-info" style="margin-top:12px;">
+      <strong>Media map setup for this page (Dashboard → Media):</strong><br>
+      Product 1 original: <code>https://picsum.photos/id/30/600/400</code>
+        → DE: <code>https://picsum.photos/id/471/600/400</code>
+        | IT: <code>https://picsum.photos/id/493/600/400</code>
+        | ES: <code>https://picsum.photos/id/1035/600/400</code><br>
+      Product 2 original: <code>https://picsum.photos/id/225/600/400</code>
+        → DE: <code>https://picsum.photos/id/431/600/400</code>
+        | IT: <code>https://picsum.photos/id/1060/600/400</code><br>
+      Product 3 original: <code>https://picsum.photos/id/312/600/400</code>
+        → DE: <code>https://picsum.photos/id/635/600/400</code>
+        | IT: <code>https://picsum.photos/id/766/600/400</code>
+    </div>
+
+    <!-- Filter bar — options translate -->
+    <div class="filter-bar">
+      <button class="filter-btn active" aria-label="Show all products">All</button>
+      <button class="filter-btn" aria-label="Filter by espresso roast">Espresso</button>
+      <button class="filter-btn" aria-label="Filter by filter coffee">Filter / Pour-over</button>
+      <button class="filter-btn" aria-label="Filter by cold brew">Cold Brew</button>
+      <button class="filter-btn" aria-label="Show only certified organic products">Organic</button>
+    </div>
+
+    <div class="product-grid">
+
+      <!-- Product 1 -->
+      <div class="product-card">
+        <img
+          src="https://picsum.photos/id/30/600/400"
+          alt="A freshly brewed espresso in a small white cup on a wooden surface"
+          loading="lazy"
+          title="Espresso Classico — click to view details"
+        >
+        <div class="product-body">
+          <span class="badge badge-dark">Dark Roast</span>
+          <div class="origin-badge">🇧🇷 Brazil &amp; 🇨🇴 Colombia blend</div>
+          <h3>Espresso Classico</h3>
+          <p>A rich, full-bodied dark roast built for the portafilter. Notes of dark chocolate, roasted walnut, caramel sweetness, and a clean bitter finish that lingers pleasantly.</p>
+          <div class="flavor-tags">
+            <span class="flavor-tag">Dark Chocolate</span>
+            <span class="flavor-tag">Caramel</span>
+            <span class="flavor-tag">Roasted Walnut</span>
+          </div>
+          <div class="product-meta">
+            <span class="price" data-price="12.90">€12.90</span>
+            <span class="sku">SKU: ESP-CLS-250</span>
+          </div>
+          <button class="add-btn" aria-label="Add Espresso Classico 250g to cart">Add to Cart — 250 g</button>
+        </div>
+      </div>
+
+      <!-- Product 2 -->
+      <div class="product-card">
+        <img
+          src="https://picsum.photos/id/225/600/400"
+          alt="Coffee cherries on the branch in an Ethiopian highland farm"
+          loading="lazy"
+          title="Ethiopia Yirgacheffe — click to view details"
+        >
+        <div class="product-body">
+          <span class="badge badge-light">Light Roast</span>
+          <div class="origin-badge">🇪🇹 Ethiopia — Yirgacheffe, Gedeo Zone</div>
+          <h3>Ethiopia Yirgacheffe</h3>
+          <p>A celebrated washed natural from the birthplace of coffee. Intensely floral and fruit-forward — jasmine blossom, bergamot, ripe blueberry, and a tea-like body. Best as pour-over or Chemex.</p>
+          <div class="flavor-tags">
+            <span class="flavor-tag">Jasmine</span>
+            <span class="flavor-tag">Blueberry</span>
+            <span class="flavor-tag">Bergamot</span>
+            <span class="flavor-tag">Tea-like</span>
+          </div>
+          <div class="product-meta">
+            <span class="price" data-price="14.50">€14.50</span>
+            <span class="sku">SKU: ETH-YRG-250</span>
+          </div>
+          <button class="add-btn" aria-label="Add Ethiopia Yirgacheffe 250g to cart">Add to Cart — 250 g</button>
+        </div>
+      </div>
+
+      <!-- Product 3 -->
+      <div class="product-card">
+        <img
+          src="https://picsum.photos/id/312/600/400"
+          alt="A glass of filter coffee on a wooden table next to a window"
+          loading="lazy"
+          title="Colombia Huila — click to view details"
+        >
+        <div class="product-body">
+          <span class="badge badge-medium">Medium Roast</span>
+          <div class="origin-badge">🇨🇴 Colombia — Huila Department</div>
+          <h3>Colombia Huila</h3>
+          <p>Sweet, approachable, and balanced. Brown sugar, stone fruit (peach and apricot), and a clean milk chocolate finish. Works brilliantly across all brew methods from AeroPress to drip machine.</p>
+          <div class="flavor-tags">
+            <span class="flavor-tag">Brown Sugar</span>
+            <span class="flavor-tag">Peach</span>
+            <span class="flavor-tag">Milk Chocolate</span>
+          </div>
+          <div class="product-meta">
+            <span class="price" data-price="13.50">€13.50</span>
+            <span class="sku">SKU: COL-HLA-250</span>
+          </div>
+          <button class="add-btn" aria-label="Add Colombia Huila 250g to cart">Add to Cart — 250 g</button>
+        </div>
+      </div>
+
+      <!-- Product 4 -->
+      <div class="product-card">
+        <img
+          src="https://picsum.photos/id/431/600/400"
+          alt="Whole coffee beans roasted to a medium level, photographed close up"
+          loading="lazy"
+          title="Guatemala Antigua — click to view details"
+        >
+        <div class="product-body">
+          <span class="badge badge-medium">Medium-Dark Roast</span>
+          <div class="origin-badge">🇬🇹 Guatemala — Antigua Valley</div>
+          <h3>Guatemala Antigua</h3>
+          <p>Grown on the volcanic slopes of Antigua, this coffee delivers a bold yet smooth cup. Dark cocoa, dried cherry, and a pleasant smokiness make it perfect for those who enjoy depth without bitterness.</p>
+          <div class="flavor-tags">
+            <span class="flavor-tag">Dark Cocoa</span>
+            <span class="flavor-tag">Dried Cherry</span>
+            <span class="flavor-tag">Smoky</span>
+          </div>
+          <div class="product-meta">
+            <span class="price" data-price="22.00">€22.00</span>
+            <span class="sku">SKU: GTM-ANT-500</span>
+          </div>
+          <button class="add-btn" aria-label="Add Guatemala Antigua 500g to cart">Add to Cart — 500 g</button>
+        </div>
+      </div>
+
+      <!-- Product 5 -->
+      <div class="product-card">
+        <img
+          src="https://picsum.photos/id/635/600/400"
+          alt="Green unroasted coffee beans from Sumatra in a wooden bowl"
+          loading="lazy"
+          title="Sumatra Mandheling — click to view details"
+        >
+        <div class="product-body">
+          <span class="badge badge-dark">Dark Roast</span>
+          <div class="origin-badge">🇮🇩 Indonesia — Sumatra, Mandheling</div>
+          <h3>Sumatra Mandheling</h3>
+          <p>Wet-hulled and dark roasted in the Indonesian tradition. Earthy, full-bodied, and complex — cedar, dark spice, raw cocoa, and a syrupy mouthfeel. An exceptional espresso base or cold brew ingredient.</p>
+          <div class="flavor-tags">
+            <span class="flavor-tag">Cedar</span>
+            <span class="flavor-tag">Dark Spice</span>
+            <span class="flavor-tag">Raw Cocoa</span>
+            <span class="flavor-tag">Earthy</span>
+          </div>
+          <div class="product-meta">
+            <span class="price" data-price="13.90">€13.90</span>
+            <span class="sku">SKU: SUM-MDH-250</span>
+          </div>
+          <button class="add-btn" aria-label="Add Sumatra Mandheling 250g to cart">Add to Cart — 250 g</button>
+        </div>
+      </div>
+
+      <!-- Product 6 -->
+      <div class="product-card">
+        <img
+          src="https://picsum.photos/id/1060/600/400"
+          alt="A barista carefully pouring a pour-over coffee at a specialty cafe"
+          loading="lazy"
+          title="Signature Blend №12 — click to view details"
+        >
+        <div class="product-body">
+          <span class="badge badge-medium">Medium Roast</span>
+          <div class="origin-badge">🌍 Multi-origin seasonal blend</div>
+          <h3>Signature Blend №12</h3>
+          <p>Our house blend, crafted fresh every season. Currently: 60% Colombia Huila, 40% Ethiopia Yirgacheffe. Bright acidity balanced with sweetness — a crowd-pleaser for drip, AeroPress, and flat white.</p>
+          <div class="flavor-tags">
+            <span class="flavor-tag">Red Apple</span>
+            <span class="flavor-tag">Honey</span>
+            <span class="flavor-tag">Citrus Zest</span>
+          </div>
+          <div class="product-meta">
+            <span class="price" data-price="11.90">€11.90</span>
+            <span class="sku">SKU: SIG-BLN-250</span>
+          </div>
+          <button class="add-btn" aria-label="Add Signature Blend No.12 250g to cart">Add to Cart — 250 g</button>
+        </div>
+      </div>
+
+    </div><!-- /product-grid -->
+
+    <hr>
+
+    <!-- Brew guide table — all text translates -->
+    <span class="test-label translates">✅ Table content translates</span>
+    <h2 style="margin-top:12px;">Brew Guide</h2>
+    <p>Use this reference to get the best from each coffee.</p>
+    <table class="brew-table">
+      <thead>
+        <tr>
+          <th>Coffee</th>
+          <th>Recommended method</th>
+          <th>Grind size</th>
+          <th>Water temp</th>
+          <th>Brew time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Espresso Classico</td>
+          <td>Espresso, Moka Pot</td>
+          <td>Fine</td>
+          <td>92–94 °C</td>
+          <td>25–30 s</td>
+        </tr>
+        <tr>
+          <td>Ethiopia Yirgacheffe</td>
+          <td>Pour-over, Chemex</td>
+          <td>Medium-coarse</td>
+          <td>88–92 °C</td>
+          <td>3.5–4 min</td>
+        </tr>
+        <tr>
+          <td>Colombia Huila</td>
+          <td>All methods</td>
+          <td>Medium</td>
+          <td>90–93 °C</td>
+          <td>3–4 min</td>
+        </tr>
+        <tr>
+          <td>Sumatra Mandheling</td>
+          <td>French Press, Cold Brew</td>
+          <td>Coarse</td>
+          <td>93–96 °C</td>
+          <td>4–5 min (12 h cold)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <!-- Grind selector — should NOT be translated (dropdown values are functional) -->
+    <span class="test-label no-translate">❌ Exclude selector values via <code>.grind-value</code></span>
+    <h2>Grind Options at Checkout</h2>
+    <p>The grind options below are functional values passed to our roastery system. While the labels translate, the option <em>values</em> must remain unchanged. Use a CSS selector exclusion on <code>.grind-value</code> if your values are human-readable text that DeepL might try to translate.</p>
+    <select aria-label="Select grind size" style="padding:10px 14px;border:1px solid #bdbdbd;border-radius:6px;font-size:1rem;max-width:320px;">
+      <option value="whole-bean">Whole bean — grind at home</option>
+      <option value="espresso-fine">Espresso (fine grind)</option>
+      <option value="moka-medium-fine">Moka pot (medium-fine)</option>
+      <option value="filter-medium">Filter / drip (medium)</option>
+      <option value="french-press-coarse">French press (coarse)</option>
+      <option value="cold-brew-extra-coarse">Cold brew (extra coarse)</option>
+    </select>
+
   </div>
-  <div class="product">
-    <h2>Edelstahl Wasserkocher</h2>
-    <p>Moderner Wasserkocher aus hochwertigem Edelstahl mit Temperaturregelung. Perfekt für Tee, Kaffee und Babynahrung.</p>
-    <p class="price">59,99 €</p>
-    <p><strong>Nur noch 3 Stück verfügbar</strong></p>
-  </div>
-  <div class="product">
-    <span class="badge">Neu</span>
-    <h2>Bio Kaffeebohnen 1kg</h2>
-    <p>Handverlesene Bio-Kaffeebohnen aus nachhaltigem Anbau. Kräftiges Aroma mit leichten Schokoladennoten. Geröstet in Deutschland.</p>
-    <p class="price">24,99 €</p>
-    <p><strong>Bestseller</strong> — Über 1000 verkaufte Pakete diesen Monat</p>
-  </div>
-  <div class="product">
-    <h2>Espresso Tassen Set (6 Stück)</h2>
-    <p>Elegantes Porzellan-Tassen-Set für den perfekten Espresso. Spülmaschinenfest und mikrowellengeeignet. Jede Tasse fasst 80 ml.</p>
-    <p class="price">34,99 €</p>
-    <p><strong>Auf Lager</strong> — Kostenloser Versand inklusive</p>
-  </div>
+</section>
+
+<footer>
+  <p>© 2024 Kaffeerösterei Kreuzau · Rurstraße 12, 52372 Kreuzau, Germany</p>
+</footer>
+
 </body>
 </html>

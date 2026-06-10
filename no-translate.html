@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Path Exclusion Demo — Kaffeerösterei Kreuzau</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 860px; margin: 60px auto; padding: 0 24px; color: #1a1a1a; background: #fafafa; }
+    h1 { color: #4a148c; font-size: 2rem; margin-bottom: 12px; }
+    h2 { color: #6a1b9a; font-size: 1.3rem; margin: 28px 0 8px; }
+    p { line-height: 1.7; color: #333; margin-bottom: 12px; }
+    .badge { display: inline-block; background: #f3e5f5; color: #4a148c; border: 1px solid #ce93d8; border-radius: 4px; padding: 2px 10px; font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 12px; }
+    .config-box { background: #f3e5f5; border-left: 4px solid #7b1fa2; border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 16px 0; }
+    .config-box code { background: rgba(0,0,0,.07); padding: 2px 6px; border-radius: 3px; font-family: monospace; font-size: .9rem; }
+    .result-box { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+    .result-box .box { border-radius: 10px; padding: 16px 18px; }
+    .box-pass { background: #e8f5e9; border: 1px solid #a5d6a7; }
+    .box-fail { background: #ffebee; border: 1px solid #ef9a9a; }
+    .box h3 { font-size: 1rem; margin-bottom: 6px; }
+    ul { padding-left: 20px; line-height: 2; }
+    a { color: #5d4037; }
+    nav { background: #3e2723; padding: 0 24px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,.3); margin-bottom: 48px; }
+    nav .brand { color: #fff; font-size: 1.1rem; font-weight: 700; padding: 18px 0; margin-right: auto; }
+    nav a { color: #efebe9; padding: 18px 16px; font-size: .95rem; display: inline-block; }
+    nav a:hover { color: #fff; background: rgba(255,255,255,.1); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<nav style="margin-bottom:0;">
+  <span class="brand">☕ Kaffeerösterei Kreuzau</span>
+  <a href="index.html">Home</a>
+  <a href="products.html">Products</a>
+  <a href="about.html">About Us</a>
+  <a href="contact.html">Contact</a>
+</nav>
+
+<div style="padding:48px 24px;max-width:860px;margin:0 auto;">
+
+  <span class="badge">🚫 Path Exclusion Test Page</span>
+  <h1>This Page is Excluded from Translation</h1>
+
+  <p>This page (<code>/no-translate.html</code>) is meant to be configured as a <strong>path exclusion</strong> in your dashboard.
+     Once configured, this page will be served in the original language even when accessed via a translated subdomain
+     (e.g., <code>it.kaffeeröstreikreuzau.de/no-translate.html</code>).</p>
+
+  <div class="config-box">
+    <strong>How to configure this:</strong><br>
+    Go to <strong>Dashboard → Languages → Excluded Paths</strong> and add:<br>
+    <code>/no-translate.html</code> — excludes this exact page<br>
+    <code>/no-translate/</code> — excludes all pages under this path prefix<br>
+    <code>/admin/</code> — a common exclusion for admin panels<br>
+    <code>/api/</code> — exclude REST/JSON API responses<br>
+    <code>/cart</code>, <code>/checkout</code> — exclude sensitive transaction pages
+  </div>
+
+  <h2>Why exclude a page?</h2>
+  <ul>
+    <li>Admin and back-office pages that staff use in a fixed language</li>
+    <li>API endpoints returning JSON — translation would corrupt the data</li>
+    <li>Cart and checkout flows where payment provider iframes are involved</li>
+    <li>Legal pages that are only valid in the original language</li>
+    <li>User-account pages where the content is user-generated and personal</li>
+  </ul>
+
+  <h2>What happens on excluded paths?</h2>
+  <div class="result-box">
+    <div class="box box-pass">
+      <h3>✅ Still works</h3>
+      <ul>
+        <li>The page loads normally on all subdomains</li>
+        <li>The language switcher widget is still injected</li>
+        <li>Hreflang tags still point to the correct subdomains</li>
+        <li>Media map image swaps still apply (optional)</li>
+      </ul>
+    </div>
+    <div class="box box-fail">
+      <h3>🚫 Skipped</h3>
+      <ul>
+        <li>No text is sent to DeepL</li>
+        <li>All content appears in the original source language</li>
+        <li>No translation cost for this page</li>
+        <li>No cached translated version stored</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Test it yourself</h2>
+  <p>
+    1. Add <code>/no-translate.html</code> to your excluded paths in the dashboard.<br>
+    2. Visit <a href="#">it.kaffeeröstreikreuzau.de/no-translate.html</a> — the content on this page will remain in English.<br>
+    3. Then visit <a href="index.html">it.kaffeeröstreikreuzau.de/index.html</a> — that page WILL be translated.
+  </p>
+
+  <p>The content below is normal translatable text that will demonstrate the exclusion when the path rule is active:</p>
+  <p>Good morning. Welcome to the administration area. Please use this section to manage your product listings, update your roastery description, and configure your delivery zones. All changes take effect immediately.</p>
+  <p>Current roastery status: <strong>Online</strong> · Orders today: <strong>47</strong> · Pending dispatch: <strong>12</strong></p>
+
+  <p><a href="index.html">← Back to the main test page</a></p>
+
+</div>
+
+</body>
+</html>

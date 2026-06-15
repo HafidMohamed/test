@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account — Kaffeerösterei Kreuzau</title>
+  <meta name="description" content="Create your free account at Kaffeerösterei Kreuzau. Get access to exclusive member offers, order tracking, and our monthly coffee subscription.">
+  <meta property="og:title"       content="Create Account — Kaffeerösterei Kreuzau">
+  <meta property="og:description" content="Join thousands of coffee lovers. Create your free account to unlock member-exclusive offers.">
+  <meta property="og:url"         content="https://xn--kaffeerstreikreuzau-w6b.de/register.html">
+  <meta name="twitter:title"       content="Create Account — Kaffeerösterei Kreuzau">
+  <meta name="twitter:description" content="Create a free account and start your specialty coffee journey.">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a1a1a; background: #fafafa; }
+    a { color: #5d4037; text-decoration: none; } a:hover { text-decoration: underline; }
+    nav { background: #3e2723; padding: 0 20px; display: flex; align-items: center; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    nav .brand { color: #fff; font-size: 1.05rem; font-weight: 700; padding: 16px 0; margin-right: auto; text-decoration: none; }
+    nav a { color: #efebe9; padding: 16px 11px; font-size: .88rem; display: inline-block; }
+    nav a:hover { color: #fff; background: rgba(255,255,255,.1); text-decoration: none; }
+    footer { background: #3e2723; color: #efebe9; padding: 28px 0; text-align: center; margin-top: 64px; }
+    footer a { color: #ffccbc; }
+    .wrapper { min-height: calc(100vh - 200px); display: flex; align-items: flex-start; justify-content: center; padding: 48px 24px; background: linear-gradient(135deg,#efebe9,#fff8f5); }
+    .card { background: #fff; border-radius: 14px; padding: 40px 38px; box-shadow: 0 8px 40px rgba(0,0,0,.1); width: 100%; max-width: 520px; }
+    h1 { font-size: 1.6rem; color: #3e2723; margin-bottom: 6px; }
+    .subtitle { color: #795548; margin-bottom: 28px; line-height: 1.5; }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .fg { margin-bottom: 16px; }
+    label { display: block; font-weight: 600; margin-bottom: 5px; color: #3e2723; font-size: .93rem; }
+    input[type=text], input[type=email], input[type=password], select { width: 100%; padding: 10px 14px; border: 1.5px solid #d7ccc8; border-radius: 7px; font-size: .95rem; }
+    input:focus, select:focus { outline: none; border-color: #bf360c; }
+    .hint { font-size: .82rem; color: #795548; margin-top: 3px; }
+    .error-msg { font-size: .82rem; color: #c62828; margin-top: 3px; display: none; }
+    .checkbox-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; cursor: pointer; }
+    .checkbox-row input { margin-top: 3px; flex-shrink: 0; }
+    .checkbox-row span { font-size: .9rem; color: #5d4037; line-height: 1.5; }
+    input[type=submit] { width: 100%; padding: 13px; background: #bf360c; color: #fff; border: none; border-radius: 7px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 6px; transition: background .2s; }
+    input[type=submit]:hover { background: #e64a19; }
+    .benefits { background: #faf0ea; border-radius: 10px; padding: 18px 20px; margin-bottom: 24px; }
+    .benefits h3 { font-size: .95rem; color: #3e2723; margin-bottom: 10px; }
+    .benefits ul { list-style: none; padding: 0; }
+    .benefits li { padding: 3px 0; font-size: .9rem; color: #5d4037; }
+    .benefits li::before { content: '✓ '; color: #2e7d32; font-weight: 700; }
+    .alert { padding: 12px 16px; border-radius: 7px; margin-bottom: 16px; font-size: .92rem; display: none; }
+    .alert-error   { background: #ffebee; border: 1px solid #ef9a9a; color: #c62828; }
+    .alert-success { background: #e8f5e9; border: 1px solid #a5d6a7; color: #2e7d32; }
+    .form-footer { text-align: center; margin-top: 18px; color: #795548; font-size: .92rem; }
+    .form-footer a { color: #bf360c; font-weight: 600; }
+    .strength-bar { height: 4px; border-radius: 2px; margin-top: 6px; background: #e0e0e0; transition: background .3s; }
+    .strength-label { font-size: .78rem; margin-top: 3px; }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="brand" href="/">☕ Kaffeerösterei Kreuzau</a>
+  <a href="/products.html">Shop</a>
+  <a href="/blog.html">Blog</a>
+  <a href="/about.html">About</a>
+  <a href="/contact.html">Contact</a>
+  <a href="/cart.html">🛒 Cart</a>
+  <a href="/login.html">Sign in</a>
+</nav>
+
+<main class="wrapper">
+  <div class="card">
+    <h1>Create your account</h1>
+    <p class="subtitle">Join over 12,000 coffee lovers who get freshly roasted beans delivered to their door.</p>
+
+    <!-- TRANSLATES: benefit text items -->
+    <div class="benefits">
+      <h3>What you get for free:</h3>
+      <ul>
+        <li>Order tracking and full order history</li>
+        <li>Exclusive member-only discounts and early access to new roasts</li>
+        <li>Easy subscription management for recurring deliveries</li>
+        <li>Personalised brewing recommendations based on your taste</li>
+        <li>Earn loyalty points with every purchase</li>
+      </ul>
+    </div>
+
+    <div class="alert alert-error"   id="err"  role="alert"  aria-live="assertive"></div>
+    <div class="alert alert-success" id="succ" role="status" aria-live="polite"></div>
+
+    <!-- TRANSLATES: all labels, placeholders, select options, aria-labels -->
+    <form id="reg-form" action="/api/auth/register" method="POST" novalidate>
+      <div class="row-2">
+        <div class="fg">
+          <label for="firstName">First name</label>
+          <input type="text" id="firstName" name="firstName" required
+                 placeholder="Maria" autocomplete="given-name"
+                 aria-label="Enter your first name" aria-required="true">
+          <span class="error-msg" id="fn-err">Please enter your first name.</span>
+        </div>
+        <div class="fg">
+          <label for="lastName">Last name</label>
+          <input type="text" id="lastName" name="lastName" required
+                 placeholder="Müller" autocomplete="family-name"
+                 aria-label="Enter your last name" aria-required="true">
+        </div>
+      </div>
+
+      <div class="fg">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" required
+               placeholder="you@example.com" autocomplete="email"
+               aria-label="Enter your email address"
+               aria-describedby="email-hint" aria-required="true">
+        <p class="hint" id="email-hint">We will send your order confirmations to this address</p>
+        <span class="error-msg" id="em-err">Please enter a valid email address.</span>
+      </div>
+
+      <div class="fg">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required
+               placeholder="At least 8 characters" autocomplete="new-password"
+               aria-label="Create a password" aria-required="true"
+               minlength="8" oninput="checkStrength(this.value)">
+        <div class="strength-bar" id="strength-bar"></div>
+        <p class="strength-label hint" id="strength-label">Choose a strong password with letters, numbers, and symbols</p>
+      </div>
+
+      <div class="fg">
+        <label for="country">Country</label>
+        <!-- TRANSLATES: select option labels -->
+        <select id="country" name="country" aria-label="Select your country">
+          <option value="">Please select your country</option>
+          <option value="DE">Germany</option>
+          <option value="AT">Austria</option>
+          <option value="CH">Switzerland</option>
+          <option value="NL">Netherlands</option>
+          <option value="BE">Belgium</option>
+          <option value="FR">France</option>
+          <option value="GB">United Kingdom</option>
+          <option value="US">United States</option>
+          <option value="OTHER">Other country</option>
+        </select>
+      </div>
+
+      <!-- TRANSLATES: checkbox label text -->
+      <label class="checkbox-row">
+        <input type="checkbox" name="newsletter" id="newsletter">
+        <span>Send me exclusive offers, new roast announcements, and brewing tips by email (optional)</span>
+      </label>
+
+      <label class="checkbox-row" style="margin-bottom:20px">
+        <input type="checkbox" name="terms" id="terms" required>
+        <!-- Link text also translates -->
+        <span>I agree to the <a href="/terms.html" target="_blank">Terms of Service</a> and <a href="/privacy.html" target="_blank">Privacy Policy</a></span>
+      </label>
+
+      <!-- TRANSLATES: input[type=submit] value -->
+      <input type="submit" value="Create my free account"
+             aria-label="Submit registration form">
+    </form>
+
+    <div class="form-footer">
+      <p>Already have an account? <a href="/login.html">Sign in here</a></p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px">
+    <p>© 2025 Kaffeerösterei Kreuzau · <a href="/contact.html">Contact</a> · <a href="/privacy.html">Privacy Policy</a></p>
+  </div>
+</footer>
+
+<!-- NO-TRANSLATE: all <script> content stays in source language -->
+<script>
+function checkStrength(val) {
+  var bar = document.getElementById('strength-bar');
+  var lbl = document.getElementById('strength-label');
+  var score = 0;
+  if (val.length >= 8)  score++;
+  if (/[A-Z]/.test(val)) score++;
+  if (/[0-9]/.test(val)) score++;
+  if (/[^A-Za-z0-9]/.test(val)) score++;
+  var colours = ['#ef5350','#ff9800','#8bc34a','#4caf50'];
+  var labels  = ['Too short','Weak','Good','Strong'];
+  bar.style.width  = (score * 25) + '%';
+  bar.style.background = colours[score-1] || '#e0e0e0';
+  lbl.textContent  = score > 0 ? labels[score-1] : 'Choose a strong password with letters, numbers, and symbols';
+}
+
+document.getElementById('reg-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var errEl  = document.getElementById('err');
+  var succEl = document.getElementById('succ');
+  errEl.style.display = succEl.style.display = 'none';
+
+  var firstName = document.getElementById('firstName').value.trim();
+  var lastName  = document.getElementById('lastName').value.trim();
+  var email     = document.getElementById('email').value.trim();
+  var password  = document.getElementById('password').value;
+  var terms     = document.getElementById('terms').checked;
+
+  if (!firstName) { document.getElementById('fn-err').style.display='block'; return; }
+  if (!email || !email.includes('@')) { document.getElementById('em-err').style.display='block'; return; }
+  if (!terms) { errEl.textContent='You must agree to the Terms of Service to continue.'; errEl.style.display='block'; return; }
+
+  setTimeout(function() {
+    sessionStorage.setItem('kk_user', JSON.stringify({ name: firstName + ' ' + lastName, email: email }));
+    succEl.textContent = 'Account created! Welcome, ' + firstName + '. Redirecting to your dashboard…';
+    succEl.style.display = 'block';
+    setTimeout(function(){ window.location.href = '/dashboard.html'; }, 1600);
+  }, 700);
+});
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(function(){});
+}
+</script>
+</body>
+</html>

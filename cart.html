@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart — Kaffeerösterei Kreuzau</title>
+  <meta name="description" content="Review your selected coffees and proceed to checkout. Free delivery on orders over €40.">
+  <meta property="og:title"       content="Your Cart — Kaffeerösterei Kreuzau">
+  <meta property="og:description" content="Review your order and checkout. Free delivery over €40.">
+  <meta property="og:url"         content="https://xn--kaffeerstreikreuzau-w6b.de/cart.html">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a1a1a; background: #f5f0ee; }
+    a { color: #5d4037; text-decoration: none; } a:hover { text-decoration: underline; }
+    nav { background: #3e2723; padding: 0 20px; display: flex; align-items: center; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    nav .brand { color: #fff; font-size: 1.05rem; font-weight: 700; padding: 16px 0; margin-right: auto; text-decoration: none; }
+    nav a { color: #efebe9; padding: 16px 11px; font-size: .88rem; display: inline-block; }
+    nav a:hover { color: #fff; background: rgba(255,255,255,.1); text-decoration: none; }
+    footer { background: #3e2723; color: #efebe9; padding: 28px 0; text-align: center; margin-top: 48px; }
+    footer a { color: #ffccbc; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    h1 { font-size: 1.8rem; color: #3e2723; }
+    h2 { font-size: 1.2rem; color: #3e2723; margin-bottom: 12px; }
+    h3 { font-size: 1rem; color: #4e342e; margin-bottom: 6px; }
+    p { line-height: 1.6; color: #555; margin-bottom: 8px; }
+    .btn { display: inline-block; background: #bf360c; color: #fff !important; padding: 11px 24px; border-radius: 6px; font-weight: 600; border: none; cursor: pointer; font-size: .95rem; transition: background .2s; }
+    .btn:hover { background: #e64a19; text-decoration: none; }
+    .btn-sm { padding: 6px 14px; font-size: .82rem; }
+    .btn-block { width: 100%; text-align: center; padding: 14px; font-size: 1rem; }
+    .btn-ghost { background: transparent !important; color: #bf360c !important; border: 1.5px solid #bf360c; }
+    .btn-ghost:hover { background: #bf360c !important; color: #fff !important; }
+    .btn-danger { background: #c62828 !important; }
+    .btn-danger:hover { background: #e53935 !important; }
+    .page-header { background: #3e2723; color: #fff; padding: 24px 0; margin-bottom: 0; }
+    .page-header h1 { color: #fff; }
+    .layout { display: grid; grid-template-columns: 1fr 320px; gap: 24px; padding: 28px 0; }
+    @media(max-width:768px) { .layout { grid-template-columns: 1fr; } }
+    .card { background: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,.06); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; font-size: .93rem; }
+    th { text-align: left; padding: 12px 16px; border-bottom: 2px solid #d7ccc8; color: #5d4037; font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; }
+    td { padding: 16px; border-bottom: 1px solid #f0e9e4; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    .product-cell { display: flex; align-items: center; gap: 14px; }
+    .product-cell img { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+    .product-name { font-weight: 600; color: #3e2723; }
+    .product-meta { font-size: .84rem; color: #795548; }
+    .qty-control { display: flex; align-items: center; gap: 8px; }
+    .qty-btn { width: 28px; height: 28px; border: 1.5px solid #d7ccc8; background: #fff; border-radius: 4px; cursor: pointer; font-size: 1rem; font-weight: 700; color: #3e2723; display: flex; align-items: center; justify-content: center; transition: all .2s; }
+    .qty-btn:hover { border-color: #bf360c; color: #bf360c; }
+    .qty-value { font-weight: 700; min-width: 20px; text-align: center; }
+    .summary-card { padding: 22px; }
+    .summary-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f0e9e4; font-size: .93rem; }
+    .summary-row:last-of-type { border-bottom: none; }
+    .summary-row.total { font-weight: 700; font-size: 1.05rem; color: #3e2723; padding-top: 12px; border-top: 2px solid #d7ccc8; border-bottom: none; margin-top: 4px; }
+    .shipping-notice { background: #e8f5e9; border-radius: 6px; padding: 10px 14px; font-size: .86rem; color: #2e7d32; margin: 12px 0; display: flex; align-items: center; gap: 8px; }
+    .promo-row { display: flex; gap: 8px; margin: 14px 0; }
+    .promo-row input { flex: 1; padding: 9px 12px; border: 1.5px solid #d7ccc8; border-radius: 6px; font-size: .9rem; }
+    .promo-row input:focus { outline: none; border-color: #bf360c; }
+    .trust-badges { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 14px; }
+    .trust-badge { font-size: .78rem; color: #795548; text-align: center; }
+    .empty-cart { text-align: center; padding: 48px 24px; }
+    .empty-cart p { margin: 16px 0 24px; font-size: 1.05rem; color: #795548; }
+    .breadcrumb { padding: 12px 0; font-size: .85rem; color: #795548; }
+    .breadcrumb a { color: #5d4037; }
+    .breadcrumb span { margin: 0 6px; }
+    /* price values are wrapped in data-proxy-notranslate to prevent translator mangling currency */
+    [data-proxy-notranslate] { /* prices stay in source language */ }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="brand" href="/">☕ Kaffeerösterei Kreuzau</a>
+  <a href="/products.html">Shop</a>
+  <a href="/blog.html">Blog</a>
+  <a href="/about.html">About</a>
+  <a href="/contact.html">Contact</a>
+  <a href="/cart.html" style="font-weight:700">🛒 Cart</a>
+  <a href="/login.html">Sign in</a>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <!-- TRANSLATES: heading and breadcrumb -->
+    <div class="breadcrumb" style="margin-bottom:8px">
+      <a href="/">Home</a><span>›</span><a href="/products.html">Shop</a><span>›</span>Shopping Cart
+    </div>
+    <h1>Your shopping cart</h1>
+  </div>
+</header>
+
+<div class="container">
+  <div id="cart-view">
+    <div class="layout">
+      <!-- CART ITEMS TABLE -->
+      <div>
+        <div class="card">
+          <!-- TRANSLATES: table headers, button text, accessibility attributes -->
+          <table aria-label="Shopping cart items">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Unit price</th>
+                <th>Subtotal</th>
+                <th><span class="sr-only">Actions</span></th>
+              </tr>
+            </thead>
+            <tbody id="cart-tbody">
+              <!-- Rows injected by JS — text will be retranslated by the observer -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- TRANSLATES: action links and note -->
+        <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap;align-items:center">
+          <a href="/products.html" class="btn btn-ghost btn-sm">← Continue shopping</a>
+          <button class="btn btn-sm" onclick="updateCart()" aria-label="Update cart quantities">Update cart</button>
+          <button class="btn btn-sm btn-danger" onclick="clearCart()" aria-label="Remove all items from cart">Clear cart</button>
+        </div>
+
+        <!-- TRANSLATES: guarantee text -->
+        <div style="margin-top:20px;padding:16px;background:#fff;border-radius:10px;font-size:.87rem;color:#5d4037;border-left:4px solid #bf360c">
+          <strong>Our freshness guarantee:</strong> All coffees are roasted to order and dispatched within 2 business days.
+          Not satisfied? We offer a full refund within 30 days of delivery — no questions asked.
+        </div>
+      </div>
+
+      <!-- ORDER SUMMARY -->
+      <aside>
+        <div class="card summary-card">
+          <h2>Order summary</h2>
+
+          <!-- TRANSLATES: row labels. Values wrapped in data-proxy-notranslate so prices aren't garbled -->
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span data-proxy-notranslate id="sum-subtotal">€25.80</span>
+          </div>
+          <div class="summary-row">
+            <span>Delivery</span>
+            <span data-proxy-notranslate id="sum-shipping">€4.90</span>
+          </div>
+          <div class="summary-row">
+            <span>Discount</span>
+            <span data-proxy-notranslate id="sum-discount">—</span>
+          </div>
+          <div class="summary-row total">
+            <span>Total (incl. VAT)</span>
+            <span data-proxy-notranslate id="sum-total">€30.70</span>
+          </div>
+
+          <!-- TRANSLATES: free shipping notice -->
+          <div class="shipping-notice" id="shipping-notice" aria-live="polite">
+            🚚 Add <span data-proxy-notranslate id="shipping-remaining">€14.20</span> more to get free delivery!
+          </div>
+
+          <!-- TRANSLATES: promo label and button -->
+          <div class="promo-row">
+            <input type="text" placeholder="Promo or gift code" aria-label="Enter a promo or discount code" id="promo-input">
+            <button class="btn btn-sm" onclick="applyPromo()">Apply</button>
+          </div>
+
+          <!-- TRANSLATES: checkout button label -->
+          <button class="btn btn-block" onclick="window.location.href='/checkout.html'"
+                  aria-label="Proceed to secure checkout">
+            Proceed to checkout →
+          </button>
+
+          <!-- TRANSLATES: trust badge text -->
+          <div class="trust-badges">
+            <div class="trust-badge">🔒 Secure payment</div>
+            <div class="trust-badge">📦 Free returns</div>
+            <div class="trust-badge">⭐ 4.9/5 rating</div>
+          </div>
+        </div>
+
+        <!-- TRANSLATES: upsell text -->
+        <div class="card" style="padding:18px;margin-top:16px">
+          <h3>Customers also bought</h3>
+          <div id="upsell-container"></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- EMPTY CART VIEW (hidden initially) -->
+  <div id="empty-cart-view" class="empty-cart" style="display:none">
+    <div style="font-size:4rem">🛒</div>
+    <!-- TRANSLATES: empty state text and CTA -->
+    <p>Your cart is empty — time to discover some amazing coffee!</p>
+    <a href="/products.html" class="btn">Browse our coffees →</a>
+  </div>
+</div>
+
+<footer>
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px">
+    <p>© 2025 Kaffeerösterei Kreuzau · <a href="/contact.html">Contact</a> · <a href="/privacy.html">Privacy Policy</a></p>
+  </div>
+</footer>
+
+<!-- NO-TRANSLATE: JS content. DOM-injected text IS caught by the retranslation observer. -->
+<script>
+// Cart state (would normally come from server/cookie)
+var cartItems = [
+  { id:"PROD-001", name:"Espresso Classico", meta:"250g · Dark roast", price:12.90, qty:2, image:"https://picsum.photos/id/30/70/70" },
+  { id:"PROD-004", name:"Morning Blend",     meta:"500g · Medium roast", price:11.90, qty:1, image:"https://picsum.photos/id/766/70/70" }
+];
+
+var UPSELLS = [
+  { name:"Ethiopian Yirgacheffe", price:"€16.50", img:"https://picsum.photos/id/225/60/60" },
+  { name:"Colombia Huila Decaf",  price:"€14.90", img:"https://picsum.photos/id/431/60/60" }
+];
+
+function fmt(n) { return '€' + n.toFixed(2); }
+
+function renderCart() {
+  var tbody = document.getElementById('cart-tbody');
+  if (!cartItems.length) {
+    document.getElementById('cart-view').style.display = 'none';
+    document.getElementById('empty-cart-view').style.display = 'block';
+    return;
+  }
+  tbody.innerHTML = cartItems.map(function(item, i) {
+    return '<tr>' +
+      '<td><div class="product-cell">' +
+        '<img src="' + item.image + '" alt="' + item.name + ' product photo">' +
+        '<div><div class="product-name">' + item.name + '</div>' +
+        '<div class="product-meta">' + item.meta + '</div></div>' +
+      '</div></td>' +
+      '<td><div class="qty-control">' +
+        '<button class="qty-btn" onclick="changeQty(' + i + ',-1)" aria-label="Decrease quantity of ' + item.name + '">−</button>' +
+        '<span class="qty-value" id="qty-' + i + '">' + item.qty + '</span>' +
+        '<button class="qty-btn" onclick="changeQty(' + i + ',1)" aria-label="Increase quantity of ' + item.name + '">+</button>' +
+      '</div></td>' +
+      // Price cells wrapped in data-proxy-notranslate so currency symbols are not garbled
+      '<td><span data-proxy-notranslate>' + fmt(item.price) + '</span></td>' +
+      '<td><strong data-proxy-notranslate>' + fmt(item.price * item.qty) + '</strong></td>' +
+      '<td><button class="btn btn-sm btn-danger" onclick="removeItem(' + i + ')" aria-label="Remove ' + item.name + ' from cart">Remove</button></td>' +
+      '</tr>';
+  }).join('');
+
+  // Render upsells
+  document.getElementById('upsell-container').innerHTML = UPSELLS.map(function(u) {
+    return '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0e9e4">' +
+      '<img src="' + u.img + '" alt="' + u.name + '" style="width:44px;height:44px;object-fit:cover;border-radius:6px">' +
+      '<div style="flex:1"><p style="font-size:.88rem;font-weight:600;margin-bottom:2px">' + u.name + '</p>' +
+      '<p style="font-size:.82rem;margin:0"><span data-proxy-notranslate>' + u.price + '</span></p></div>' +
+      '<button class="btn btn-sm" onclick="addUpsell(this)" aria-label="Add ' + u.name + ' to cart">Add</button></div>';
+  }).join('');
+
+  updateSummary();
+}
+
+function updateSummary() {
+  var sub = cartItems.reduce(function(s, i){ return s + i.price * i.qty; }, 0);
+  var ship = sub >= 40 ? 0 : 4.90;
+  var remaining = 40 - sub;
+  document.getElementById('sum-subtotal').textContent = fmt(sub);
+  document.getElementById('sum-shipping').textContent = ship === 0 ? '€0.00 — Free!' : fmt(ship);
+  document.getElementById('sum-discount').textContent = '—';
+  document.getElementById('sum-total').textContent = fmt(sub + ship);
+  var notice = document.getElementById('shipping-notice');
+  if (sub >= 40) {
+    notice.innerHTML = '🎉 You qualify for free delivery!';
+    notice.style.background = '#e8f5e9';
+  } else {
+    notice.innerHTML = '🚚 Add <span data-proxy-notranslate>€' + remaining.toFixed(2) + '</span> more to get free delivery!';
+  }
+}
+
+function changeQty(idx, delta) {
+  cartItems[idx].qty = Math.max(1, cartItems[idx].qty + delta);
+  renderCart();
+}
+
+function removeItem(idx) {
+  if (confirm('Remove this item from your cart?')) {
+    cartItems.splice(idx, 1);
+    renderCart();
+  }
+}
+
+function clearCart() {
+  if (confirm('Are you sure you want to clear your entire cart?')) {
+    cartItems = [];
+    renderCart();
+  }
+}
+
+function updateCart() {
+  alert('Cart updated successfully.');
+}
+
+function applyPromo() {
+  var code = document.getElementById('promo-input').value.trim().toUpperCase();
+  if (code === 'COFFEE10') {
+    alert('Promo code applied! 10% discount has been added to your order.');
+    document.getElementById('sum-discount').textContent = '−€2.58';
+  } else {
+    alert('Invalid promo code. Try COFFEE10 for a 10% discount.');
+  }
+}
+
+function addUpsell(btn) {
+  btn.textContent = '✓ Added';
+  btn.disabled = true;
+}
+
+document.addEventListener('DOMContentLoaded', renderCart);
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(function(){});
+}
+</script>
+</body>
+</html>

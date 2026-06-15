@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Account Dashboard — Kaffeerösterei Kreuzau</title>
+  <meta name="description" content="Manage your orders, subscription, loyalty points, and account settings in your Kaffeerösterei Kreuzau customer dashboard.">
+  <meta property="og:title"       content="My Account — Kaffeerösterei Kreuzau">
+  <meta property="og:description" content="Track orders, manage your subscription, and redeem loyalty points.">
+  <meta property="og:url"         content="https://xn--kaffeerstreikreuzau-w6b.de/dashboard.html">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a1a1a; background: #f5f0ee; }
+    a { color: #5d4037; text-decoration: none; } a:hover { text-decoration: underline; }
+    nav { background: #3e2723; padding: 0 20px; display: flex; align-items: center; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    nav .brand { color: #fff; font-size: 1.05rem; font-weight: 700; padding: 16px 0; margin-right: auto; text-decoration: none; }
+    nav a { color: #efebe9; padding: 16px 11px; font-size: .88rem; display: inline-block; }
+    nav a:hover { color: #fff; background: rgba(255,255,255,.1); text-decoration: none; }
+    footer { background: #3e2723; color: #efebe9; padding: 28px 0; text-align: center; margin-top: 48px; }
+    footer a { color: #ffccbc; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    h1 { font-size: 1.7rem; color: #3e2723; }
+    h2 { font-size: 1.2rem; color: #3e2723; margin-bottom: 14px; }
+    h3 { font-size: 1rem; color: #4e342e; margin-bottom: 6px; }
+    p { line-height: 1.6; color: #555; }
+    .btn { display: inline-block; background: #bf360c; color: #fff !important; padding: 9px 20px; border-radius: 6px; font-weight: 600; border: none; cursor: pointer; font-size: .88rem; }
+    .btn:hover { background: #e64a19; text-decoration: none; }
+    .btn-sm { padding: 6px 14px; font-size: .82rem; }
+    .btn-outline { background: transparent !important; color: #bf360c !important; border: 2px solid #bf360c; }
+    .btn-outline:hover { background: #bf360c !important; color: #fff !important; }
+    .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: .78rem; font-weight: 700; }
+    .badge-green  { background: #e8f5e9; color: #2e7d32; }
+    .badge-blue   { background: #e3f2fd; color: #1565c0; }
+    .badge-orange { background: #fff3e0; color: #e65100; }
+    .page-header { background: #3e2723; color: #fff; padding: 28px 0; margin-bottom: 0; }
+    .page-header h1 { color: #fff; }
+    .page-header p  { color: #efebe9; }
+    .dashboard-layout { display: grid; grid-template-columns: 240px 1fr; gap: 28px; padding: 32px 0; }
+    @media(max-width:768px) { .dashboard-layout { grid-template-columns:1fr; } }
+    .sidebar { }
+    .sidebar-nav { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+    .sidebar-nav a { display: flex; align-items: center; gap: 10px; padding: 13px 18px; border-bottom: 1px solid #f0e9e4; color: #4e342e; font-size: .9rem; }
+    .sidebar-nav a:hover { background: #faf0ea; text-decoration: none; }
+    .sidebar-nav a.active { background: #bf360c; color: #fff; font-weight: 600; }
+    .sidebar-nav a.active:hover { background: #e64a19; }
+    .content { display: flex; flex-direction: column; gap: 24px; }
+    .widget { background: #fff; border-radius: 12px; padding: 22px 24px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+    .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+    @media(max-width:600px) { .stats-row { grid-template-columns: repeat(2,1fr); } }
+    .stat { background: #fff; border-radius: 12px; padding: 18px 20px; box-shadow: 0 2px 10px rgba(0,0,0,.06); text-align: center; }
+    .stat-value { font-size: 2rem; font-weight: 700; color: #bf360c; }
+    .stat-label { font-size: .83rem; color: #795548; margin-top: 4px; }
+    table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    th { text-align: left; padding: 10px 12px; border-bottom: 2px solid #d7ccc8; color: #5d4037; font-weight: 700; font-size: .82rem; text-transform: uppercase; letter-spacing: .04em; }
+    td { padding: 13px 12px; border-bottom: 1px solid #f0e9e4; color: #444; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #faf7f5; }
+    .sub-card { border: 2px solid #d7ccc8; border-radius: 10px; padding: 18px 20px; }
+    .sub-card.active { border-color: #4caf50; background: #f9fff9; }
+    .progress-bar { height: 8px; background: #e0e0e0; border-radius: 4px; margin: 8px 0; }
+    .progress-fill { height: 100%; border-radius: 4px; background: linear-gradient(to right, #bf360c, #e64a19); transition: width .5s; }
+    .loading { text-align: center; padding: 32px; color: #795548; }
+    .spinner { width: 28px; height: 28px; border: 3px solid #d7ccc8; border-top-color: #bf360c; border-radius: 50%; animation: spin .7s linear infinite; margin: 0 auto 10px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    /* dynamic content rendered by JS — translated by the retranslation observer */
+    .dynamic-content { min-height: 60px; }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="brand" href="/">☕ Kaffeerösterei Kreuzau</a>
+  <a href="/products.html">Shop</a>
+  <a href="/blog.html">Blog</a>
+  <a href="/about.html">About</a>
+  <a href="/contact.html">Contact</a>
+  <a href="/cart.html">🛒 Cart</a>
+  <a href="/dashboard.html" style="font-weight:700">My Account</a>
+</nav>
+
+<!-- TRANSLATES: page header text -->
+<header class="page-header">
+  <div class="container">
+    <h1 id="welcome-heading">My Account Dashboard</h1>
+    <p id="welcome-sub">Track orders, manage your subscription, and redeem your loyalty points</p>
+  </div>
+</header>
+
+<div class="container">
+  <div class="dashboard-layout">
+
+    <!-- TRANSLATES: sidebar navigation labels -->
+    <aside class="sidebar">
+      <nav class="sidebar-nav" aria-label="Account navigation">
+        <a href="/dashboard.html" class="active" aria-current="page">📦 Order History</a>
+        <a href="/profile.html">👤 Personal Details</a>
+        <a href="#subscription">🔄 My Subscription</a>
+        <a href="#loyalty">⭐ Loyalty Points</a>
+        <a href="#addresses">📍 Saved Addresses</a>
+        <a href="#preferences">☕ Coffee Preferences</a>
+        <a href="/login.html" id="logout-link">🚪 Sign Out</a>
+      </nav>
+    </aside>
+
+    <main class="content">
+
+      <!-- TRANSLATES: stat labels. Values are rendered dynamically (MutationObserver will pick them up) -->
+      <div class="stats-row">
+        <div class="stat">
+          <div class="stat-value" id="stat-orders">…</div>
+          <div class="stat-label">Total orders placed</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="stat-spent">…</div>
+          <div class="stat-label">Total amount spent</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="stat-points">…</div>
+          <div class="stat-label">Loyalty points earned</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="stat-next">…</div>
+          <div class="stat-label">Days until next delivery</div>
+        </div>
+      </div>
+
+      <!-- ORDER HISTORY — content injected by JS → tests retranslation observer -->
+      <div class="widget">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <h2>Recent orders</h2>
+          <a href="#" class="btn btn-sm btn-outline">View all orders</a>
+        </div>
+        <div id="orders-container" class="dynamic-content">
+          <div class="loading"><div class="spinner"></div>Loading your orders…</div>
+        </div>
+      </div>
+
+      <!-- SUBSCRIPTION WIDGET -->
+      <div class="widget" id="subscription">
+        <h2>Your active subscription</h2>
+        <div id="subscription-content" class="dynamic-content">
+          <div class="loading"><div class="spinner"></div>Loading subscription details…</div>
+        </div>
+      </div>
+
+      <!-- LOYALTY POINTS -->
+      <div class="widget" id="loyalty">
+        <h2>Loyalty rewards</h2>
+        <p id="loyalty-intro">Earn points with every purchase. Redeem them for free coffee or exclusive gifts.</p>
+        <div style="margin-top:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span style="font-size:.88rem;color:#5d4037">Progress to next reward</span>
+            <span id="loyalty-progress-label" style="font-size:.88rem;font-weight:700;color:#bf360c">…</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" id="loyalty-bar" style="width:0%"></div></div>
+          <p id="loyalty-next-reward" style="font-size:.85rem;color:#795548;margin-top:6px"></p>
+        </div>
+        <!-- TRANSLATES: table headers -->
+        <table style="margin-top:20px" aria-label="Loyalty points transaction history">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Activity</th>
+              <th>Points</th>
+              <th>Balance</th>
+            </tr>
+          </thead>
+          <tbody id="loyalty-table">
+            <tr><td colspan="4" style="text-align:center;padding:20px;color:#a1887f">Loading transaction history…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- QUICK REORDER — static content, TRANSLATES -->
+      <div class="widget">
+        <h2>Quick reorder</h2>
+        <p>Order your favourites again with one click.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-top:16px" id="reorder-grid">
+          <div class="loading"><div class="spinner"></div>Loading favourites…</div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<footer>
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px">
+    <p>© 2025 Kaffeerösterei Kreuzau · <a href="/contact.html">Contact</a> · <a href="/privacy.html">Privacy Policy</a></p>
+    <p style="margin-top:8px;font-size:.85rem;opacity:.7">Rurstraße 12 · 52372 Kreuzau, Germany</p>
+  </div>
+</footer>
+
+<!-- NO-TRANSLATE: JS code. Text injected into the DOM by this code IS seen by the retranslation observer. -->
+<script>
+// Mock data — JS strings are NOT translated. The rendered HTML nodes ARE (via MutationObserver retranslation).
+var MOCK_ORDERS = [
+  { id:"ORD-78421", date:"2025-06-01", status:"Delivered",   statusKey:"badge-green",  total:"€34.70", items:"Espresso Classico (×2), Morning Blend (×1)", tracking:"DHL-984712" },
+  { id:"ORD-74983", date:"2025-05-12", status:"Delivered",   statusKey:"badge-green",  total:"€16.50", items:"Ethiopian Yirgacheffe (×1)", tracking:"DHL-874512" },
+  { id:"ORD-71205", date:"2025-04-28", status:"Delivered",   statusKey:"badge-green",  total:"€48.30", items:"Espresso Classico (×2), Colombia Huila Decaf (×1)", tracking:"DHL-762190" }
+];
+
+var MOCK_LOYALTY = [
+  { date:"2025-06-01", activity:"Purchase — ORD-78421", points:"+69", balance:"1,240" },
+  { date:"2025-05-12", activity:"Purchase — ORD-74983", points:"+33", balance:"1,171" },
+  { date:"2025-04-28", activity:"Purchase — ORD-71205", points:"+96", balance:"1,138" },
+  { date:"2025-04-01", activity:"Referral bonus",        points:"+200", balance:"1,042" }
+];
+
+var MOCK_PRODUCTS = [
+  { id:"PROD-001", name:"Espresso Classico", price:"€12.90", image:"https://picsum.photos/id/30/120/90" },
+  { id:"PROD-002", name:"Ethiopian Yirgacheffe", price:"€16.50", image:"https://picsum.photos/id/225/120/90" },
+  { id:"PROD-004", name:"Morning Blend 500g", price:"€11.90", image:"https://picsum.photos/id/766/120/90" }
+];
+
+function getUser() {
+  try { return JSON.parse(sessionStorage.getItem('kk_user')); } catch(e) { return null; }
+}
+
+function renderOrders(container) {
+  // The TEXT nodes created here are in English and will be picked up by the retranslation observer
+  if (!MOCK_ORDERS.length) { container.innerHTML = '<p>You have not placed any orders yet. <a href="/products.html">Browse our coffees →</a></p>'; return; }
+  var html = '<table aria-label="Order history">';
+  html += '<thead><tr><th>Order</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th><th>Action</th></tr></thead><tbody>';
+  MOCK_ORDERS.forEach(function(o) {
+    html += '<tr>';
+    html += '<td style="font-weight:700">' + o.id + '</td>';
+    html += '<td>' + o.date + '</td>';
+    html += '<td style="color:#5d4037">' + o.items + '</td>';
+    // NO-TRANSLATE: price wrapped in data-proxy-notranslate so price strings are not translated
+    html += '<td style="font-weight:700"><span data-proxy-notranslate>' + o.total + '</span></td>';
+    html += '<td><span class="badge ' + o.statusKey + '">' + o.status + '</span></td>';
+    html += '<td><a href="#" class="btn btn-sm btn-outline">View details</a></td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+function renderSubscription(container) {
+  container.innerHTML = [
+    '<div class="sub-card active">',
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">',
+    '<h3>Monthly Coffee Subscription — 500g</h3>',
+    '<span class="badge badge-green">Active</span></div>',
+    '<p style="margin-bottom:12px">Next delivery: <strong>1 July 2025</strong> · <span data-proxy-notranslate>€22.90/month</span></p>',
+    '<p style="margin-bottom:16px;font-size:.9rem;color:#5d4037">Your next roast is being prepared. We will dispatch it 3 business days before the scheduled delivery date.</p>',
+    '<div style="display:flex;gap:10px;flex-wrap:wrap">',
+    '<button class="btn btn-sm" onclick="alert(\'Subscription management is simulated in this demo.\')">Manage subscription</button>',
+    '<button class="btn btn-sm btn-outline" onclick="alert(\'Pause functionality is simulated.\')">Pause delivery</button>',
+    '<button class="btn btn-sm btn-outline" onclick="alert(\'Skip functionality is simulated.\')">Skip next delivery</button>',
+    '</div></div>'
+  ].join('');
+}
+
+function renderLoyalty() {
+  var points = 1240;
+  var nextReward = 1500;
+  var pct = Math.min(100, Math.round((points / nextReward) * 100));
+  document.getElementById('loyalty-progress-label').textContent = points + ' / ' + nextReward + ' points';
+  document.getElementById('loyalty-bar').style.width = pct + '%';
+  document.getElementById('loyalty-next-reward').textContent = (nextReward - points) + ' more points needed to unlock a free bag of coffee.';
+
+  var tbody = document.getElementById('loyalty-table');
+  tbody.innerHTML = MOCK_LOYALTY.map(function(row) {
+    return '<tr><td>' + row.date + '</td><td>' + row.activity + '</td>' +
+           '<td style="font-weight:700;color:#2e7d32">' + row.points + '</td>' +
+           '<td>' + row.balance + '</td></tr>';
+  }).join('');
+}
+
+function renderReorders(grid) {
+  grid.innerHTML = MOCK_PRODUCTS.map(function(p) {
+    return '<div class="card" style="padding:14px;text-align:center">' +
+           '<img src="' + p.image + '" alt="' + p.name + '" style="width:100%;height:90px;object-fit:cover;border-radius:6px;margin-bottom:8px">' +
+           '<p style="font-weight:600;font-size:.88rem;margin-bottom:4px">' + p.name + '</p>' +
+           '<p style="font-size:.85rem;margin-bottom:10px"><span data-proxy-notranslate>' + p.price + '</span></p>' +
+           '<button class="btn btn-sm" onclick="addToCart(\'' + p.id + '\')" aria-label="Add ' + p.name + ' to cart">Add to cart</button>' +
+           '</div>';
+  }).join('');
+}
+
+function addToCart(id) { alert('Added to cart (simulated). Go to /cart.html to view your cart.'); }
+
+function init() {
+  var user = getUser();
+  if (user) {
+    document.getElementById('welcome-heading').textContent = 'Welcome back, ' + user.name;
+    document.getElementById('welcome-sub').textContent = 'Here is an overview of your account and recent activity.';
+  }
+  document.getElementById('stat-orders').textContent = '12';
+  document.getElementById('stat-spent').textContent  = '€348';
+  document.getElementById('stat-points').textContent = '1,240';
+  document.getElementById('stat-next').textContent   = '16';
+
+  // Simulate loading delay (tests that retranslation observer catches late-rendered nodes)
+  setTimeout(function() {
+    renderOrders(document.getElementById('orders-container'));
+    renderSubscription(document.getElementById('subscription-content'));
+    renderLoyalty();
+    renderReorders(document.getElementById('reorder-grid'));
+  }, 800);
+}
+
+document.getElementById('logout-link').addEventListener('click', function(e) {
+  e.preventDefault();
+  sessionStorage.removeItem('kk_user');
+  window.location.href = '/login.html';
+});
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+else init();
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(function(){});
+}
+</script>
+</body>
+</html>

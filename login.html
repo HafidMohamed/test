@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — Kaffeerösterei Kreuzau</title>
+  <!-- PROXY TEST ✓ title, description, og:title, og:description → ALL translated -->
+  <meta name="description" content="Sign in to your Kaffeerösterei Kreuzau account to track orders, manage your coffee subscription, and access member-exclusive offers.">
+  <meta property="og:title"       content="Sign In — Kaffeerösterei Kreuzau">
+  <meta property="og:description" content="Access your account to track orders and manage your coffee subscription.">
+  <meta property="og:image"       content="https://picsum.photos/id/766/1200/630">
+  <meta property="og:url"         content="https://xn--kaffeerstreikreuzau-w6b.de/login.html">
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="Sign In — Kaffeerösterei Kreuzau">
+  <meta name="twitter:description" content="Access your account to track orders and manage your coffee subscription.">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a1a1a; background: #fafafa; }
+    a { color: #5d4037; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    nav { background: #3e2723; padding: 0 20px; display: flex; align-items: center; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    nav .brand { color: #fff; font-size: 1.05rem; font-weight: 700; padding: 16px 0; margin-right: auto; text-decoration: none; }
+    nav a { color: #efebe9; padding: 16px 11px; font-size: .88rem; display: inline-block; }
+    nav a:hover { color: #fff; background: rgba(255,255,255,.1); text-decoration: none; }
+    footer { background: #3e2723; color: #efebe9; padding: 28px 0; text-align: center; margin-top: 64px; }
+    footer a { color: #ffccbc; }
+    .wrapper { min-height: calc(100vh - 200px); display: flex; align-items: center; justify-content: center; padding: 48px 24px; background: linear-gradient(135deg,#efebe9,#fff8f5); }
+    .card { background: #fff; border-radius: 14px; padding: 44px 40px; box-shadow: 0 8px 40px rgba(0,0,0,.1); width: 100%; max-width: 440px; }
+    .card h1 { text-align: center; font-size: 1.6rem; color: #3e2723; margin-bottom: 6px; }
+    .subtitle { text-align: center; color: #795548; margin-bottom: 28px; line-height: 1.5; }
+    .fg { margin-bottom: 18px; }
+    label { display: block; font-weight: 600; margin-bottom: 5px; color: #3e2723; font-size: .93rem; }
+    input[type=email], input[type=password] { width: 100%; padding: 11px 14px; border: 1.5px solid #d7ccc8; border-radius: 7px; font-size: .95rem; background: #fff; transition: border-color .2s; }
+    input:focus { outline: none; border-color: #bf360c; }
+    .hint { font-size: .82rem; color: #795548; margin-top: 4px; }
+    .row-between { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .checkbox-label { display: flex; align-items: center; gap: 8px; cursor: pointer; color: #5d4037; font-size: .9rem; }
+    input[type=submit] { width: 100%; padding: 13px; background: #bf360c; color: #fff; border: none; border-radius: 7px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s; margin-top: 4px; }
+    input[type=submit]:hover { background: #e64a19; }
+    .divider { display: flex; align-items: center; gap: 12px; margin: 22px 0; color: #a1887f; font-size: .88rem; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #d7ccc8; }
+    .btn-social { width: 100%; padding: 11px; border: 1.5px solid #d7ccc8; border-radius: 7px; background: #fff; cursor: pointer; font-size: .95rem; font-weight: 600; color: #3e2723; margin-bottom: 10px; transition: background .2s; }
+    .btn-social:hover { background: #f5f0ee; }
+    .form-footer { text-align: center; margin-top: 22px; color: #795548; font-size: .92rem; }
+    .form-footer a { color: #bf360c; font-weight: 600; }
+    .alert { padding: 12px 16px; border-radius: 7px; margin-bottom: 16px; font-size: .92rem; display: none; }
+    .alert-error   { background: #ffebee; border: 1px solid #ef9a9a; color: #c62828; }
+    .alert-success { background: #e8f5e9; border: 1px solid #a5d6a7; color: #2e7d32; }
+    .demo-box { background: #faf0ea; border: 1px solid #d7ccc8; border-radius: 8px; padding: 14px 18px; margin-top: 20px; font-size: .87rem; }
+    .demo-box strong { color: #3e2723; }
+    code { background: #f0e9e4; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: .9em; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="brand" href="/">☕ Kaffeerösterei Kreuzau</a>
+  <a href="/products.html">Shop</a>
+  <a href="/blog.html">Blog</a>
+  <a href="/about.html">About</a>
+  <a href="/contact.html">Contact</a>
+  <a href="/cart.html">🛒 Cart</a>
+</nav>
+
+<!-- ═══ EVERYTHING BELOW TRANSLATES unless explicitly marked ═══ -->
+<main class="wrapper">
+  <div class="card">
+    <h1>Welcome back</h1>
+    <p class="subtitle">Sign in to your account to manage your orders and subscription</p>
+
+    <!-- TRANSLATES: error/success messages -->
+    <div class="alert alert-error"   id="err"  role="alert"  aria-live="assertive">Invalid email address or password. Please try again.</div>
+    <div class="alert alert-success" id="succ" role="status" aria-live="polite">You have successfully signed in. Redirecting to your dashboard…</div>
+
+    <form id="login-form" action="/api/auth/login" method="POST" novalidate>
+      <!-- TRANSLATES: labels, placeholder, aria-label, aria-describedby hint text -->
+      <div class="fg">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" required autocomplete="email"
+               placeholder="you@example.com"
+               aria-label="Enter your email address"
+               aria-required="true"
+               aria-describedby="email-hint">
+        <p class="hint" id="email-hint">The email you registered with</p>
+      </div>
+
+      <div class="fg">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required
+               autocomplete="current-password"
+               placeholder="Enter your password"
+               aria-label="Enter your password"
+               aria-required="true"
+               minlength="8">
+      </div>
+
+      <div class="row-between">
+        <label class="checkbox-label">
+          <!-- TRANSLATES: checkbox label text -->
+          <input type="checkbox" name="remember" id="remember"> Remember me for 30 days
+        </label>
+        <a href="/forgot-password.html">Forgot password?</a>
+      </div>
+
+      <!-- TRANSLATES: input[type=submit] value attribute -->
+      <input type="submit" value="Sign in to my account"
+             aria-label="Submit login form">
+    </form>
+
+    <div class="divider">or continue with</div>
+
+    <!-- TRANSLATES: button aria-label -->
+    <button class="btn-social" onclick="socialDemo('google')"
+            aria-label="Sign in with your Google account">
+      🔵 Continue with Google
+    </button>
+    <button class="btn-social" onclick="socialDemo('apple')"
+            aria-label="Sign in with your Apple account">
+      🍎 Continue with Apple
+    </button>
+
+    <div class="form-footer">
+      <p>Don't have an account? <a href="/register.html">Create one for free</a></p>
+      <p style="margin-top:8px"><a href="/">← Return to the shop</a></p>
+    </div>
+
+    <!-- Demo credentials section -->
+    <div class="demo-box">
+      <strong>🧪 Test credentials</strong><br>
+      <!-- NO-TRANSLATE: <code> content is never translated -->
+      Email: <code>demo@example.com</code><br>
+      Password: <code>demo1234</code>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px">
+    <p>© 2025 Kaffeerösterei Kreuzau · <a href="/contact.html">Contact</a> · <a href="/privacy.html">Privacy Policy</a></p>
+    <p style="margin-top:8px;font-size:.85rem;opacity:.7">Rurstraße 12 · 52372 Kreuzau, Germany</p>
+  </div>
+</footer>
+
+<!-- NO-TRANSLATE: <script> tag content is never translated by the proxy -->
+<script>
+// Mock login handler — JS strings inside <script> stay in their original language
+document.getElementById('login-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var email    = document.getElementById('email').value.trim();
+  var password = document.getElementById('password').value;
+  var errEl    = document.getElementById('err');
+  var succEl   = document.getElementById('succ');
+  errEl.style.display = succEl.style.display = 'none';
+
+  var VALID = [
+    { email:'demo@example.com', password:'demo1234', name:'Demo User' },
+    { email:'test@kreuzau.de',  password:'coffee123', name:'Hans Müller' }
+  ];
+
+  setTimeout(function() {
+    var user = VALID.find(function(u){ return u.email===email && u.password===password; });
+    if (user) {
+      sessionStorage.setItem('kk_user', JSON.stringify({ name:user.name, email:user.email }));
+      succEl.style.display = 'block';
+      setTimeout(function(){ window.location.href = '/dashboard.html'; }, 1400);
+    } else {
+      errEl.style.display = 'block';
+      errEl.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }
+  }, 500);
+});
+
+function socialDemo(provider) {
+  alert('Social login with ' + provider + ' is simulated. Use the test credentials above.');
+}
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(function(){});
+}
+</script>
+</body>
+</html>

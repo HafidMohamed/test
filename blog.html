@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coffee Journal — Kaffeerösterei Kreuzau</title>
+  <meta name="description" content="Explore brewing guides, origin stories, tasting notes, and coffee culture insights from the team at Kaffeerösterei Kreuzau.">
+  <meta property="og:title"       content="Coffee Journal — Kaffeerösterei Kreuzau">
+  <meta property="og:description" content="Brewing guides, origin stories, and tasting notes from our roasters.">
+  <meta property="og:image"       content="https://picsum.photos/id/225/1200/630">
+  <meta property="og:url"         content="https://xn--kaffeerstreikreuzau-w6b.de/blog.html">
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="Coffee Journal — Kaffeerösterei Kreuzau">
+  <meta name="twitter:description" content="Brewing guides, origin stories, and tasting notes from our roasters.">
+
+  <!-- JSON-LD: Blog — name/description translate; url/@id stay untouched -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": "https://xn--kaffeerstreikreuzau-w6b.de/blog.html",
+    "name": "Coffee Journal — Kaffeerösterei Kreuzau",
+    "description": "Brewing guides, origin stories, tasting notes, and coffee culture insights.",
+    "url": "https://xn--kaffeerstreikreuzau-w6b.de/blog.html",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Kaffeerösterei Kreuzau",
+      "url": "https://xn--kaffeerstreikreuzau-w6b.de/",
+      "logo": { "@type": "ImageObject", "url": "https://picsum.photos/id/766/200/200" }
+    }
+  }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a1a1a; background: #fafafa; }
+    a { color: #5d4037; text-decoration: none; } a:hover { text-decoration: underline; }
+    nav { background: #3e2723; padding: 0 20px; display: flex; align-items: center; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    nav .brand { color: #fff; font-size: 1.05rem; font-weight: 700; padding: 16px 0; margin-right: auto; text-decoration: none; }
+    nav a { color: #efebe9; padding: 16px 11px; font-size: .88rem; display: inline-block; }
+    nav a:hover { color: #fff; background: rgba(255,255,255,.1); text-decoration: none; }
+    footer { background: #3e2723; color: #efebe9; padding: 28px 0; text-align: center; margin-top: 64px; }
+    footer a { color: #ffccbc; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 48px 0; }
+    h1 { font-size: 2rem; color: #3e2723; margin-bottom: 10px; }
+    h2 { font-size: 1.2rem; color: #3e2723; margin-bottom: 6px; }
+    h3 { font-size: 1rem; color: #4e342e; margin-bottom: 6px; }
+    p { line-height: 1.7; color: #555; margin-bottom: 10px; }
+    .btn { display: inline-block; background: #bf360c; color: #fff !important; padding: 9px 20px; border-radius: 6px; font-weight: 600; border: none; cursor: pointer; font-size: .88rem; }
+    .btn:hover { background: #e64a19; text-decoration: none; }
+    .hero { background: linear-gradient(135deg, #3e2723, #6d4c41); color: #fff; padding: 48px 0; margin-bottom: 0; }
+    .hero h1 { color: #fff; font-size: 2.2rem; }
+    .hero p { color: #efebe9; font-size: 1.05rem; margin-bottom: 0; }
+    .filter-bar { background: #fff; border-bottom: 1px solid #e0d5cf; padding: 14px 0; margin-bottom: 0; }
+    .filter-bar .container { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .filter-btn { padding: 6px 16px; border: 1.5px solid #d7ccc8; border-radius: 20px; cursor: pointer; font-size: .85rem; background: #fff; color: #5d4037; transition: all .2s; }
+    .filter-btn.active, .filter-btn:hover { background: #bf360c; color: #fff; border-color: #bf360c; }
+    .filter-label { font-size: .88rem; color: #795548; font-weight: 600; margin-right: 4px; }
+    .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    @media(max-width:900px) { .blog-grid { grid-template-columns: repeat(2,1fr); } }
+    @media(max-width:600px) { .blog-grid { grid-template-columns: 1fr; } }
+    .post-card { background: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,.07); overflow: hidden; display: flex; flex-direction: column; transition: transform .2s, box-shadow .2s; }
+    .post-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,.12); }
+    .post-card img { width: 100%; height: 180px; object-fit: cover; }
+    .post-card-body { padding: 18px 20px; flex: 1; display: flex; flex-direction: column; }
+    .post-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+    .category { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #bf360c; }
+    .post-date { font-size: .78rem; color: #a1887f; }
+    .read-time { font-size: .78rem; color: #a1887f; }
+    .post-card h2 { font-size: 1rem; line-height: 1.4; margin-bottom: 8px; }
+    .post-card h2 a { color: #3e2723; }
+    .post-card h2 a:hover { color: #bf360c; }
+    .post-card p { font-size: .88rem; color: #666; flex: 1; }
+    .post-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding-top: 12px; border-top: 1px solid #f0e9e4; }
+    .author { display: flex; align-items: center; gap: 8px; }
+    .author img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+    .author span { font-size: .82rem; color: #795548; }
+    .featured { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+    @media(max-width:600px) { .featured { grid-template-columns: 1fr; } }
+    .featured img { height: 280px; }
+    .featured .post-card-body { padding: 24px 28px; justify-content: center; }
+    .featured h2 { font-size: 1.4rem; }
+    .newsletter { background: #3e2723; color: #fff; padding: 48px; border-radius: 16px; text-align: center; margin-top: 48px; }
+    .newsletter h2 { color: #fff; font-size: 1.6rem; margin-bottom: 10px; }
+    .newsletter p { color: #efebe9; }
+    .newsletter-form { display: flex; gap: 10px; max-width: 420px; margin: 20px auto 0; }
+    .newsletter-form input { flex: 1; padding: 11px 16px; border: none; border-radius: 7px; font-size: .95rem; }
+    .newsletter-form input:focus { outline: 2px solid #ffccbc; }
+    .newsletter-form button { background: #bf360c; color: #fff; border: none; border-radius: 7px; padding: 11px 20px; cursor: pointer; font-weight: 700; transition: background .2s; }
+    .newsletter-form button:hover { background: #e64a19; }
+    .sidebar { }
+    .sidebar-widget { background: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,.07); padding: 20px; margin-bottom: 20px; }
+    .sidebar-widget h3 { font-size: .95rem; text-transform: uppercase; letter-spacing: .05em; color: #3e2723; margin-bottom: 14px; border-bottom: 2px solid #f0e9e4; padding-bottom: 8px; }
+    .tag-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag { padding: 4px 12px; background: #f5f0ee; border-radius: 20px; font-size: .8rem; color: #5d4037; }
+    .tag:hover { background: #bf360c; color: #fff; }
+    .main-with-sidebar { display: grid; grid-template-columns: 1fr 260px; gap: 28px; }
+    @media(max-width:900px) { .main-with-sidebar { grid-template-columns: 1fr; } }
+    .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: .78rem; font-weight: 700; background: #f5f0ee; color: #3e2723; }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="brand" href="/">☕ Kaffeerösterei Kreuzau</a>
+  <a href="/products.html">Shop</a>
+  <a href="/blog.html" style="font-weight:700">Blog</a>
+  <a href="/about.html">About</a>
+  <a href="/contact.html">Contact</a>
+  <a href="/cart.html">🛒 Cart</a>
+  <a href="/login.html">Sign in</a>
+</nav>
+
+<!-- TRANSLATES: hero text -->
+<header class="hero">
+  <div class="container">
+    <h1>Coffee Journal</h1>
+    <p>Brewing guides, origin stories, tasting notes, and the science behind every cup</p>
+  </div>
+</header>
+
+<!-- TRANSLATES: filter button labels -->
+<div class="filter-bar">
+  <div class="container">
+    <span class="filter-label">Filter by:</span>
+    <button class="filter-btn active" onclick="filterPosts('all')" aria-pressed="true">All articles</button>
+    <button class="filter-btn" onclick="filterPosts('brewing')" aria-pressed="false">Brewing guides</button>
+    <button class="filter-btn" onclick="filterPosts('origins')" aria-pressed="false">Coffee origins</button>
+    <button class="filter-btn" onclick="filterPosts('tasting')" aria-pressed="false">Tasting notes</button>
+    <button class="filter-btn" onclick="filterPosts('science')" aria-pressed="false">Coffee science</button>
+    <button class="filter-btn" onclick="filterPosts('recipes')" aria-pressed="false">Recipes</button>
+  </div>
+</div>
+
+<div class="container section">
+  <div class="main-with-sidebar">
+    <main>
+      <!-- TRANSLATES: all article titles, excerpts, author names, categories, meta text -->
+      <div class="blog-grid" id="blog-grid">
+
+        <!-- FEATURED ARTICLE (spans full width) -->
+        <article class="post-card featured" data-category="origins">
+          <img src="https://picsum.photos/id/225/700/280" alt="Ethiopian coffee farmers harvesting ripe red cherries in the Yirgacheffe highlands">
+          <div class="post-card-body">
+            <div class="post-meta">
+              <span class="category">Coffee origins</span>
+              <span class="badge">Featured</span>
+              <time class="post-date" datetime="2025-06-08">8 June 2025</time>
+              <span class="read-time">· 12 min read</span>
+            </div>
+            <h2><a href="/article.html">Inside the Yirgacheffe Valley: How Ethiopia's Most Famous Coffee is Grown</a></h2>
+            <p>We travelled to the Gedeo Zone of southern Ethiopia to trace the journey of our Ethiopian Yirgacheffe from cherry to cup. What we found was a community of farmers practising some of the oldest coffee cultivation techniques on earth, producing beans with extraordinary complexity.</p>
+            <div class="post-footer">
+              <div class="author">
+                <img src="https://picsum.photos/id/64/28/28" alt="Portrait photo of Klaus Hoffmann">
+                <span>Klaus Hoffmann · Head Roaster</span>
+              </div>
+              <a href="/article.html" class="btn" aria-label="Read full article about Ethiopian Yirgacheffe">Read article →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- REGULAR ARTICLES -->
+        <article class="post-card" data-category="brewing">
+          <img src="https://picsum.photos/id/494/400/180" alt="Close-up of coffee being poured through a V60 pour-over dripper">
+          <div class="post-card-body">
+            <div class="post-meta">
+              <span class="category">Brewing guides</span>
+              <time class="post-date" datetime="2025-06-02">2 June 2025</time>
+              <span class="read-time">· 8 min read</span>
+            </div>
+            <h2><a href="/article.html">The Perfect V60 Pour-Over: A Step-by-Step Guide for Beginners</a></h2>
+            <p>Master the V60 pour-over method with our detailed guide. From grind size to water temperature, we cover every variable that affects your final cup.</p>
+            <div class="post-footer">
+              <div class="author">
+                <img src="https://picsum.photos/id/91/28/28" alt="Portrait photo of Anna Becker">
+                <span>Anna Becker</span>
+              </div>
+              <a href="/article.html" class="btn" aria-label="Read the V60 brewing guide">Read more →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="post-card" data-category="science">
+          <img src="https://picsum.photos/id/30/400/180" alt="Microscopic view of coffee bean cellular structure during roasting">
+          <div class="post-card-body">
+            <div class="post-meta">
+              <span class="category">Coffee science</span>
+              <time class="post-date" datetime="2025-05-26">26 May 2025</time>
+              <span class="read-time">· 10 min read</span>
+            </div>
+            <h2><a href="/article.html">The Maillard Reaction: Why Roasting Temperature Matters More Than You Think</a></h2>
+            <p>Behind every great espresso is a precise set of chemical reactions. We explain the Maillard reaction and how small roasting temperature changes can completely transform flavour.</p>
+            <div class="post-footer">
+              <div class="author">
+                <img src="https://picsum.photos/id/64/28/28" alt="Portrait photo of Klaus Hoffmann">
+                <span>Klaus Hoffmann</span>
+              </div>
+              <a href="/article.html" class="btn">Read more →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="post-card" data-category="tasting">
+          <img src="https://picsum.photos/id/431/400/180" alt="A professional cupping session with multiple coffee samples in round white cups">
+          <div class="post-card-body">
+            <div class="post-meta">
+              <span class="category">Tasting notes</span>
+              <time class="post-date" datetime="2025-05-19">19 May 2025</time>
+              <span class="read-time">· 6 min read</span>
+            </div>
+            <h2><a href="/article.html">How to Taste Coffee Like a Professional: The SCA Cupping Protocol Explained</a></h2>
+            <p>Professional coffee evaluation follows strict standards. We break down the Specialty Coffee Association cupping protocol and show you how to apply it at home.</p>
+            <div class="post-footer">
+              <div class="author">
+                <img src="https://picsum.photos/id/91/28/28" alt="Portrait photo of Anna Becker">
+                <span>Anna Becker</span>
+              </div>
+              <a href="/article.html" class="btn">Read more →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="post-card" data-category="recipes">
+          <img src="https://picsum.photos/id/1060/400/180" alt="A homemade coffee tiramisu in a glass dish">
+          <div class="post-card-body">
+            <div class="post-meta">
+              <span class="category">Recipes</span>
+              <time class="post-date" datetime="2025-05-12">12 May 2025</time>
+              <span class="read-time">· 5 min read</span>
+            </div>
+            <h2><a href="/article.html">Classic Italian Tiramisu with Our Espresso Classico — Recipe</a></h2>
+            <p>The perfect dessert starts with the perfect espresso. Our traditional tiramisu recipe uses our Espresso Classico to create a rich, deeply flavoured Italian classic.</p>
+            <div class="post-footer">
+              <div class="author">
+                <img src="https://picsum.photos/id/64/28/28" alt="Portrait photo of Klaus Hoffmann">
+                <span>Klaus Hoffmann</span>
+              </div>
+              <a href="/article.html" class="btn">Read more →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="post-card" data-category="origins">
+          <img src="https://picsum.photos/id/856/400/180" alt="Colombian coffee plantation with rows of coffee trees on a hillside">
+          <div class="post-card-body">
+            <div class="post-meta">
+              <span class="category">Coffee origins</span>
+              <time class="post-date" datetime="2025-04-28">28 April 2025</time>
+              <span class="read-time">· 9 min read</span>
+            </div>
+            <h2><a href="/article.html">Colombia's Huila Department: Why Altitude Makes All the Difference</a></h2>
+            <p>At 1,700–2,000 metres above sea level, the Huila department produces some of Colombia's finest specialty coffee. We explore why high altitude and volcanic soil create exceptional beans.</p>
+            <div class="post-footer">
+              <div class="author">
+                <img src="https://picsum.photos/id/91/28/28" alt="Portrait photo of Anna Becker">
+                <span>Anna Becker</span>
+              </div>
+              <a href="/article.html" class="btn">Read more →</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- LOAD MORE -->
+      <div style="text-align:center;margin-top:32px">
+        <button class="btn" onclick="loadMore()" aria-label="Load more blog articles" id="load-more-btn">
+          Load more articles
+        </button>
+      </div>
+
+      <!-- NEWSLETTER BLOCK -->
+      <div class="newsletter">
+        <!-- TRANSLATES: all newsletter text -->
+        <h2>Never miss a roast</h2>
+        <p>Get new articles, exclusive brewing tips, and early access to limited edition coffees delivered to your inbox every two weeks.</p>
+        <form class="newsletter-form" onsubmit="subscribeNewsletter(event)" aria-label="Newsletter subscription form">
+          <input type="email" placeholder="your@email.com"
+                 aria-label="Enter your email address to subscribe"
+                 required>
+          <!-- TRANSLATES: button text -->
+          <button type="submit">Subscribe for free</button>
+        </form>
+        <p style="font-size:.8rem;margin-top:10px;opacity:.8">No spam. Unsubscribe at any time.</p>
+      </div>
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <!-- TRANSLATES: sidebar widget headings and content -->
+      <div class="sidebar-widget">
+        <h3>Popular articles</h3>
+        <ul style="list-style:none">
+          <li style="padding:8px 0;border-bottom:1px solid #f0e9e4"><a href="/article.html" style="font-size:.88rem;color:#3e2723">The Perfect V60 Pour-Over Guide</a><p style="font-size:.78rem;color:#a1887f;margin:2px 0 0">8,420 readers</p></li>
+          <li style="padding:8px 0;border-bottom:1px solid #f0e9e4"><a href="/article.html" style="font-size:.88rem;color:#3e2723">How to Store Coffee Beans</a><p style="font-size:.78rem;color:#a1887f;margin:2px 0 0">5,190 readers</p></li>
+          <li style="padding:8px 0;border-bottom:1px solid #f0e9e4"><a href="/article.html" style="font-size:.88rem;color:#3e2723">Understanding Coffee Certifications</a><p style="font-size:.78rem;color:#a1887f;margin:2px 0 0">3,710 readers</p></li>
+          <li style="padding:8px 0"><a href="/article.html" style="font-size:.88rem;color:#3e2723">Ethiopian vs. Colombian Coffee</a><p style="font-size:.78rem;color:#a1887f;margin:2px 0 0">2,940 readers</p></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-widget">
+        <h3>Browse by topic</h3>
+        <div class="tag-cloud">
+          <a href="#" class="tag">Brewing</a>
+          <a href="#" class="tag">Espresso</a>
+          <a href="#" class="tag">Pour-over</a>
+          <a href="#" class="tag">Single origin</a>
+          <a href="#" class="tag">Roasting</a>
+          <a href="#" class="tag">Ethiopia</a>
+          <a href="#" class="tag">Colombia</a>
+          <a href="#" class="tag">Decaf</a>
+          <a href="#" class="tag">Cold brew</a>
+          <a href="#" class="tag">Recipes</a>
+          <a href="#" class="tag">Sustainability</a>
+        </div>
+      </div>
+
+      <div class="sidebar-widget">
+        <h3>About the authors</h3>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <img src="https://picsum.photos/id/64/44/44" alt="Portrait photo of Klaus Hoffmann" style="width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0">
+            <div>
+              <p style="font-weight:700;font-size:.88rem;margin-bottom:2px">Klaus Hoffmann</p>
+              <p style="font-size:.8rem;color:#795548;margin:0">Head Roaster · 20 years experience</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <img src="https://picsum.photos/id/91/44/44" alt="Portrait photo of Anna Becker" style="width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0">
+            <div>
+              <p style="font-weight:700;font-size:.88rem;margin-bottom:2px">Anna Becker</p>
+              <p style="font-size:.8rem;color:#795548;margin:0">Q Grader · Coffee Educator</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer>
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px">
+    <p>© 2025 Kaffeerösterei Kreuzau · <a href="/contact.html">Contact</a> · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy</a></p>
+    <p style="margin-top:8px;font-size:.85rem;opacity:.7">Rurstraße 12 · 52372 Kreuzau, Germany</p>
+  </div>
+</footer>
+
+<!-- NO-TRANSLATE: JS -->
+<script>
+function filterPosts(category) {
+  var cards = document.querySelectorAll('.post-card');
+  var btns  = document.querySelectorAll('.filter-btn');
+  btns.forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+  event.target.classList.add('active'); event.target.setAttribute('aria-pressed','true');
+  cards.forEach(function(card) {
+    if (category === 'all' || card.dataset.category === category) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+function loadMore() {
+  var btn = document.getElementById('load-more-btn');
+  btn.textContent = 'Loading…';
+  btn.disabled = true;
+  setTimeout(function(){
+    btn.textContent = 'No more articles to load.';
+  }, 800);
+}
+
+function subscribeNewsletter(e) {
+  e.preventDefault();
+  var input = e.target.querySelector('input');
+  alert('Thank you! ' + input.value + ' has been subscribed to our newsletter.');
+  input.value = '';
+}
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(function(){});
+}
+</script>
+</body>
+</html>

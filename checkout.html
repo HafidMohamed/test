@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — Kaffeerösterei Kreuzau</title>
+  <meta name="description" content="Complete your order securely. Fast dispatch, free delivery over €40, and 30-day money-back guarantee.">
+  <meta property="og:title"       content="Checkout — Kaffeerösterei Kreuzau">
+  <meta property="og:description" content="Complete your purchase securely. Free delivery over €40.">
+  <meta property="og:url"         content="https://xn--kaffeerstreikreuzau-w6b.de/checkout.html">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a1a1a; background: #f5f0ee; }
+    a { color: #5d4037; text-decoration: none; } a:hover { text-decoration: underline; }
+    nav { background: #3e2723; padding: 0 20px; display: flex; align-items: center; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    nav .brand { color: #fff; font-size: 1.05rem; font-weight: 700; padding: 16px 0; margin-right: auto; text-decoration: none; }
+    nav a { color: #efebe9; padding: 16px 11px; font-size: .88rem; display: inline-block; }
+    nav a:hover { color: #fff; background: rgba(255,255,255,.1); text-decoration: none; }
+    footer { background: #3e2723; color: #efebe9; padding: 28px 0; text-align: center; margin-top: 48px; }
+    footer a { color: #ffccbc; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .page-header { background: #3e2723; color: #fff; padding: 20px 0; }
+    .page-header h1 { color: #fff; font-size: 1.6rem; }
+    h2 { font-size: 1.15rem; color: #3e2723; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    h2 .step-badge { width: 26px; height: 26px; background: #bf360c; color: #fff; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: .85rem; font-weight: 700; flex-shrink: 0; }
+    p { line-height: 1.6; color: #555; }
+    label { display: block; font-weight: 600; margin-bottom: 4px; color: #3e2723; font-size: .9rem; }
+    input[type=text], input[type=email], input[type=tel], input[type=number], select, textarea {
+      width: 100%; padding: 10px 13px; border: 1.5px solid #d7ccc8; border-radius: 7px; font-size: .93rem;
+    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: #bf360c; }
+    .hint { font-size: .8rem; color: #795548; margin-top: 3px; }
+    .btn { display: inline-block; background: #bf360c; color: #fff !important; padding: 11px 24px; border-radius: 6px; font-weight: 600; border: none; cursor: pointer; font-size: .95rem; transition: background .2s; }
+    .btn:hover { background: #e64a19; text-decoration: none; }
+    .btn-block { width: 100%; text-align: center; padding: 14px; font-size: 1rem; margin-top: 6px; }
+    .layout { display: grid; grid-template-columns: 1fr 320px; gap: 24px; padding: 28px 0; }
+    @media(max-width:768px) { .layout { grid-template-columns: 1fr; } }
+    .card { background: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,.06); padding: 24px; margin-bottom: 20px; }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .row-3 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 14px; }
+    .fg { margin-bottom: 14px; }
+    .radio-group { display: flex; flex-direction: column; gap: 10px; }
+    .radio-option { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border: 1.5px solid #d7ccc8; border-radius: 8px; cursor: pointer; transition: border-color .2s; }
+    .radio-option:hover { border-color: #bf360c; }
+    .radio-option input { margin-top: 2px; accent-color: #bf360c; flex-shrink: 0; }
+    .radio-option .label-wrap { display: flex; flex-direction: column; gap: 2px; }
+    .radio-option strong { font-size: .93rem; color: #3e2723; }
+    .radio-option span { font-size: .83rem; color: #795548; }
+    .payment-card-field { position: relative; }
+    .payment-card-field::after { content: '💳'; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+    .order-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f0e9e4; }
+    .order-item:last-child { border-bottom: none; }
+    .order-item img { width: 52px; height: 52px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
+    .summary-row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #f0e9e4; font-size: .92rem; }
+    .summary-row.total { font-weight: 700; font-size: 1.05rem; color: #3e2723; border-bottom: none; border-top: 2px solid #d7ccc8; padding-top: 12px; margin-top: 4px; }
+    .security-note { display: flex; align-items: center; gap: 8px; font-size: .82rem; color: #5d4037; margin-top: 10px; }
+    .alert { padding: 12px 16px; border-radius: 7px; margin-bottom: 16px; font-size: .92rem; display: none; }
+    .alert-error   { background: #ffebee; border: 1px solid #ef9a9a; color: #c62828; }
+    .alert-success { background: #e8f5e9; border: 1px solid #a5d6a7; color: #2e7d32; }
+    .step-nav { display: flex; gap: 0; margin-bottom: 24px; }
+    .step-nav .step { flex: 1; text-align: center; padding: 10px 4px; font-size: .82rem; border-bottom: 3px solid #d7ccc8; color: #a1887f; }
+    .step-nav .step.active { border-bottom-color: #bf360c; color: #bf360c; font-weight: 700; }
+    .step-nav .step.done { border-bottom-color: #4caf50; color: #2e7d32; }
+    .checkbox-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+    .checkbox-row input { margin-top: 2px; flex-shrink: 0; }
+    .checkbox-row span { font-size: .88rem; color: #5d4037; line-height: 1.5; }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="brand" href="/">☕ Kaffeerösterei Kreuzau</a>
+  <a href="/products.html">Shop</a>
+  <a href="/cart.html">🛒 Cart</a>
+  <a href="/login.html">Sign in</a>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <h1>Secure checkout</h1>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- TRANSLATES: step labels -->
+  <div class="step-nav" style="margin-top:20px">
+    <div class="step done">✓ Cart</div>
+    <div class="step active">Delivery details</div>
+    <div class="step">Payment</div>
+    <div class="step">Confirmation</div>
+  </div>
+
+  <div class="alert alert-error"   id="err"  role="alert" aria-live="assertive"></div>
+  <div class="alert alert-success" id="succ" role="status" aria-live="polite"></div>
+
+  <div class="layout">
+    <form id="checkout-form" action="/api/checkout" method="POST" novalidate>
+
+      <!-- STEP 1: CONTACT -->
+      <!-- TRANSLATES: all section headings, labels, placeholders, select options -->
+      <div class="card">
+        <h2><span class="step-badge">1</span>Contact information</h2>
+        <div class="fg">
+          <label for="email">Email address</label>
+          <input type="email" id="email" name="email" required
+                 placeholder="you@example.com" autocomplete="email"
+                 aria-label="Your email address for order confirmation"
+                 aria-required="true">
+          <p class="hint">Your order confirmation will be sent here</p>
+        </div>
+        <div class="fg">
+          <label for="phone">Phone number (optional)</label>
+          <input type="tel" id="phone" name="phone"
+                 placeholder="+49 151 23456789" autocomplete="tel"
+                 aria-label="Your phone number for delivery notifications">
+          <p class="hint">For delivery notifications only — we never share your number</p>
+        </div>
+      </div>
+
+      <!-- STEP 2: DELIVERY ADDRESS -->
+      <div class="card">
+        <h2><span class="step-badge">2</span>Delivery address</h2>
+        <div class="row-2">
+          <div class="fg">
+            <label for="firstName">First name</label>
+            <input type="text" id="firstName" name="firstName" required
+                   placeholder="Maria" autocomplete="given-name" aria-required="true">
+          </div>
+          <div class="fg">
+            <label for="lastName">Last name</label>
+            <input type="text" id="lastName" name="lastName" required
+                   placeholder="Müller" autocomplete="family-name" aria-required="true">
+          </div>
+        </div>
+        <div class="fg">
+          <label for="company">Company (optional)</label>
+          <input type="text" id="company" name="company"
+                 placeholder="Your company name" autocomplete="organization">
+        </div>
+        <div class="fg">
+          <label for="address1">Street address</label>
+          <input type="text" id="address1" name="address1" required
+                 placeholder="Musterstraße 5" autocomplete="street-address" aria-required="true">
+        </div>
+        <div class="fg">
+          <label for="address2">Apartment, suite, or floor (optional)</label>
+          <input type="text" id="address2" name="address2"
+                 placeholder="Apartment 3B" autocomplete="address-line2">
+        </div>
+        <div class="row-3">
+          <div class="fg">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" required
+                   placeholder="Köln" autocomplete="address-level2" aria-required="true">
+          </div>
+          <div class="fg">
+            <label for="zip">Postcode</label>
+            <input type="text" id="zip" name="zip" required
+                   placeholder="50667" autocomplete="postal-code" aria-required="true">
+          </div>
+          <div class="fg">
+            <label for="country">Country</label>
+            <!-- TRANSLATES: select options -->
+            <select id="country" name="country" required aria-required="true" aria-label="Select your country">
+              <option value="DE" selected>Germany</option>
+              <option value="AT">Austria</option>
+              <option value="CH">Switzerland</option>
+              <option value="NL">Netherlands</option>
+              <option value="BE">Belgium</option>
+              <option value="FR">France</option>
+              <option value="GB">United Kingdom</option>
+              <option value="US">United States</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- TRANSLATES: delivery option labels and descriptions -->
+        <div class="fg" style="margin-top:8px">
+          <label style="margin-bottom:10px">Delivery method</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="shipping" value="standard" checked>
+              <div class="label-wrap">
+                <strong>Standard delivery — <span data-proxy-notranslate>€4.90</span></strong>
+                <span>3–5 business days · DHL tracked delivery</span>
+              </div>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="shipping" value="express">
+              <div class="label-wrap">
+                <strong>Express delivery — <span data-proxy-notranslate>€9.90</span></strong>
+                <span>1–2 business days · DHL Express with signature</span>
+              </div>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="shipping" value="free">
+              <div class="label-wrap">
+                <strong>Free standard delivery</strong>
+                <span>Automatically applied on orders over <span data-proxy-notranslate>€40</span></span>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: PAYMENT -->
+      <div class="card">
+        <h2><span class="step-badge">3</span>Payment details</h2>
+
+        <!-- TRANSLATES: payment method labels -->
+        <div class="radio-group" style="margin-bottom:18px">
+          <label class="radio-option">
+            <input type="radio" name="paymentMethod" value="card" checked onchange="togglePayment(this)">
+            <div class="label-wrap">
+              <strong>Credit or debit card</strong>
+              <span>Visa, Mastercard, American Express</span>
+            </div>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="paymentMethod" value="paypal" onchange="togglePayment(this)">
+            <div class="label-wrap">
+              <strong>PayPal</strong>
+              <span>Pay securely with your PayPal account</span>
+            </div>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="paymentMethod" value="invoice" onchange="togglePayment(this)">
+            <div class="label-wrap">
+              <strong>Invoice (Klarna)</strong>
+              <span>Pay within 30 days — no interest, no fees</span>
+            </div>
+          </label>
+        </div>
+
+        <div id="card-fields">
+          <div class="fg payment-card-field">
+            <label for="cardNumber">Card number</label>
+            <input type="text" id="cardNumber" name="cardNumber"
+                   placeholder="1234 5678 9012 3456"
+                   aria-label="Enter your card number"
+                   maxlength="19" autocomplete="cc-number">
+            <!-- NO-TRANSLATE: demo notice in code block -->
+            <p class="hint">Demo only — use test number: <code>4242 4242 4242 4242</code></p>
+          </div>
+          <div class="row-2">
+            <div class="fg">
+              <label for="cardExpiry">Expiry date</label>
+              <input type="text" id="cardExpiry" name="cardExpiry"
+                     placeholder="MM / YY" aria-label="Card expiry date"
+                     maxlength="7" autocomplete="cc-exp">
+            </div>
+            <div class="fg">
+              <label for="cardCvc">Security code (CVV)</label>
+              <input type="text" id="cardCvc" name="cardCvc"
+                     placeholder="123" aria-label="Card security code"
+                     maxlength="4" autocomplete="cc-csc">
+            </div>
+          </div>
+          <div class="fg">
+            <label for="cardName">Name on card</label>
+            <input type="text" id="cardName" name="cardName"
+                   placeholder="MARIA MÜLLER" aria-label="Name as it appears on your card"
+                   autocomplete="cc-name">
+          </div>
+        </div>
+
+        <div id="paypal-message" style="display:none;padding:16px;background:#f0f7ff;border-radius:8px;color:#1565c0">
+          You will be redirected to PayPal to complete your payment after placing your order.
+        </div>
+        <div id="klarna-message" style="display:none;padding:16px;background:#fff0f8;border-radius:8px;color:#880e4f">
+          You will receive an invoice from Klarna by email. Payment is due within 30 days.
+        </div>
+      </div>
+
+      <!-- ORDER NOTES -->
+      <div class="card">
+        <h2><span class="step-badge">4</span>Additional information</h2>
+        <div class="fg">
+          <label for="notes">Order notes (optional)</label>
+          <textarea id="notes" name="notes" rows="3"
+                    placeholder="Any special delivery instructions, gift messages, or grind preferences"
+                    aria-label="Additional notes for your order"
+                    style="resize:vertical"></textarea>
+        </div>
+
+        <!-- TRANSLATES: checkbox label text -->
+        <label class="checkbox-row">
+          <input type="checkbox" name="saveAddress" id="saveAddress">
+          <span>Save this address to my account for future orders</span>
+        </label>
+        <label class="checkbox-row">
+          <input type="checkbox" name="newsletter" id="newsletter">
+          <span>Subscribe to our newsletter for exclusive offers and new roast announcements</span>
+        </label>
+      </div>
+
+      <!-- TRANSLATES: submit button value and security note -->
+      <input type="submit" value="Place my order and pay securely"
+             class="btn btn-block"
+             aria-label="Complete your purchase — secure encrypted checkout">
+
+      <p class="security-note"><span>🔒</span> Your payment details are encrypted and never stored on our servers.</p>
+    </form>
+
+    <!-- ORDER SUMMARY SIDEBAR -->
+    <aside>
+      <div class="card" style="position:sticky;top:80px">
+        <h2 style="margin-bottom:14px">Order summary</h2>
+
+        <!-- TRANSLATES: item names and meta. Prices wrapped in data-proxy-notranslate. -->
+        <div class="order-item">
+          <img src="https://picsum.photos/id/30/52/52" alt="Espresso Classico product photo">
+          <div style="flex:1">
+            <p style="font-weight:600;margin-bottom:2px">Espresso Classico</p>
+            <p style="font-size:.83rem;color:#795548;margin:0">250g · Dark roast · Quantity: 2</p>
+          </div>
+          <strong data-proxy-notranslate>€25.80</strong>
+        </div>
+        <div class="order-item">
+          <img src="https://picsum.photos/id/766/52/52" alt="Morning Blend product photo">
+          <div style="flex:1">
+            <p style="font-weight:600;margin-bottom:2px">Morning Blend</p>
+            <p style="font-size:.83rem;color:#795548;margin:0">500g · Medium roast · Quantity: 1</p>
+          </div>
+          <strong data-proxy-notranslate>€11.90</strong>
+        </div>
+
+        <div style="margin-top:14px">
+          <div class="summary-row"><span>Subtotal</span><span data-proxy-notranslate>€37.70</span></div>
+          <div class="summary-row"><span>Delivery</span><span data-proxy-notranslate>€4.90</span></div>
+          <div class="summary-row total"><span>Total (incl. VAT)</span><span data-proxy-notranslate>€42.60</span></div>
+        </div>
+
+        <!-- TRANSLATES: guarantee items -->
+        <div style="margin-top:16px;font-size:.83rem;color:#5d4037">
+          <p>✅ Roasted fresh to order</p>
+          <p>✅ Free returns within 30 days</p>
+          <p>✅ Dispatched within 2 business days</p>
+          <p>✅ Secure payment with SSL encryption</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer>
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px">
+    <p>© 2025 Kaffeerösterei Kreuzau · <a href="/contact.html">Contact</a> · <a href="/privacy.html">Privacy Policy</a></p>
+  </div>
+</footer>
+
+<!-- NO-TRANSLATE: script content -->
+<script>
+function togglePayment(radio) {
+  document.getElementById('card-fields').style.display    = radio.value === 'card'    ? 'block' : 'none';
+  document.getElementById('paypal-message').style.display = radio.value === 'paypal'  ? 'block' : 'none';
+  document.getElementById('klarna-message').style.display = radio.value === 'invoice' ? 'block' : 'none';
+}
+
+document.getElementById('checkout-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var errEl  = document.getElementById('err');
+  var succEl = document.getElementById('succ');
+  errEl.style.display = succEl.style.display = 'none';
+
+  var required = ['email','firstName','lastName','address1','city','zip'];
+  var missing = required.filter(function(id){ return !document.getElementById(id).value.trim(); });
+  if (missing.length) {
+    errEl.textContent = 'Please fill in all required fields: ' + missing.join(', ');
+    errEl.style.display = 'block';
+    errEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    return;
+  }
+
+  var submitBtn = e.target.querySelector('[type=submit]');
+  submitBtn.value = 'Processing your order…';
+  submitBtn.disabled = true;
+
+  setTimeout(function() {
+    var orderId = 'ORD-' + Math.floor(80000 + Math.random() * 9999);
+    succEl.innerHTML = '🎉 Thank you for your order! Your order number is <strong>' + orderId + '</strong>. ' +
+      'You will receive a confirmation email shortly. Estimated delivery: 3–5 business days.';
+    succEl.style.display = 'block';
+    succEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    submitBtn.style.display = 'none';
+  }, 1200);
+});
+
+// Card number formatting
+document.getElementById('cardNumber').addEventListener('input', function(e) {
+  var v = e.target.value.replace(/\D/g,'').substring(0,16);
+  e.target.value = v.replace(/(.{4})/g,'$1 ').trim();
+});
+
+document.getElementById('cardExpiry').addEventListener('input', function(e) {
+  var v = e.target.value.replace(/\D/g,'').substring(0,4);
+  if (v.length > 2) v = v.substring(0,2) + ' / ' + v.substring(2);
+  e.target.value = v;
+});
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(function(){});
+}
+</script>
+</body>
+</html>

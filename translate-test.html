@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Translation Proxy — Complete Test Suite</title>
+  <!-- ✅ TRANSLATES: title, description, og:title, og:description, twitter:title, twitter:description -->
+  <meta name="description" content="A comprehensive test page verifying every translation proxy behaviour: text nodes, attributes, JSON-LD, no-translate markers, dynamic content, and URL rewriting.">
+  <meta property="og:title"       content="Translation Proxy — Complete Test Suite">
+  <meta property="og:description" content="Verify every proxy behaviour: text, attributes, JSON-LD, exclusions, dynamic content, and URL rewriting.">
+  <meta property="og:site_name"   content="Kaffeerösterei Kreuzau">
+  <meta property="og:url"         content="https://xn--kaffeerstreikreuzau-w6b.de/translate-test.html">
+  <meta property="og:locale"      content="en_US">
+  <meta name="twitter:card"        content="summary">
+  <meta name="twitter:title"       content="Translation Proxy — Complete Test Suite">
+  <meta name="twitter:description" content="Verify every proxy behaviour: text, attributes, JSON-LD, exclusions, dynamic content.">
+
+  <!-- ✅ TRANSLATES: JSON-LD name, description, headline, reviewBody. ❌ @id, url, sameAs, image DO NOT. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "@id": "https://xn--kaffeerstreikreuzau-w6b.de/translate-test.html#product",
+    "name": "Translation Test Product — Sample Coffee Blend",
+    "description": "A sample product listing used to verify that JSON-LD text fields are correctly translated while URL and identifier fields remain unchanged.",
+    "headline": "This headline should be translated by the proxy",
+    "url": "https://xn--kaffeerstreikreuzau-w6b.de/products.html",
+    "image": "https://xn--kaffeerstreikreuzau-w6b.de/images/product.jpg",
+    "sameAs": "https://www.wikidata.org/wiki/Q1234567",
+    "brand": { "@type": "Brand", "name": "Kaffeerösterei Kreuzau" },
+    "offers": { "@type": "Offer", "priceCurrency": "EUR", "price": "12.90", "availability": "https://schema.org/InStock" },
+    "review": {
+      "@type": "Review",
+      "reviewBody": "Absolutely exceptional coffee. The floral notes and bright acidity are unlike anything I have tasted before. Highly recommended.",
+      "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+      "author": { "@type": "Person", "name": "Maria Schmidt" }
+    },
+    "inLanguage": "en"
+  }
+  </script>
+
+  <!-- ✅ TRANSLATES: FAQ JSON-LD name and text fields -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What text does the proxy translate on this page?",
+        "acceptedAnswer": { "@type": "Answer", "text": "The proxy translates all visible text nodes, specified HTML attributes (alt, title, placeholder, aria-label, etc.), SEO meta tag content, and JSON-LD text fields (name, description, headline, reviewBody)." }
+      },
+      {
+        "@type": "Question",
+        "name": "What content does the proxy leave untranslated?",
+        "acceptedAnswer": { "@type": "Answer", "text": "The proxy skips script tags, style tags, code blocks, pre-formatted text, SVG and math content, elements marked with translate=no or data-proxy-notranslate, cookie consent banners, and JSON-LD URL and identifier fields." }
+      }
+    ]
+  }
+  </script>
+
+  <!-- ❌ DOES NOT TRANSLATE: inline state blob — only _looks_translatable strings are extracted -->
+  <script id="__NEXT_DATA__" type="application/json">
+  {
+    "props": {
+      "pageProps": {
+        "title": "Welcome to the translation test page",
+        "description": "This state blob contains natural language strings that the proxy should translate.",
+        "apiKey": "sk-test-abc123xyz",
+        "statusCode": 200,
+        "url": "/translate-test.html",
+        "className": "page-wrapper",
+        "items": [
+          { "label": "Add to cart button text", "slug": "add-to-cart", "url": "/products.html" },
+          { "label": "Checkout confirmation message", "slug": "order-confirmed" }
+        ]
+      }
+    }
+  }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a1a1a; background: #f8f9fa; }
+    a { color: #5d4037; text-decoration: none; } a:hover { text-decoration: underline; }
+    nav { background: #3e2723; padding: 0 20px; display: flex; align-items: center; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    nav .brand { color: #fff; font-size: 1.05rem; font-weight: 700; padding: 16px 0; margin-right: auto; text-decoration: none; }
+    nav a { color: #efebe9; padding: 16px 11px; font-size: .88rem; display: inline-block; }
+    nav a:hover { color: #fff; background: rgba(255,255,255,.1); text-decoration: none; }
+    footer { background: #3e2723; color: #efebe9; padding: 28px 0; text-align: center; margin-top: 48px; }
+    footer a { color: #ffccbc; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 36px 0; border-bottom: 2px solid #e0e0e0; }
+    h1 { font-size: 2rem; color: #1a237e; margin-bottom: 8px; }
+    h2 { font-size: 1.3rem; color: #1a237e; margin: 0 0 16px; display: flex; align-items: center; gap: 10px; }
+    h3 { font-size: 1rem; color: #283593; margin: 18px 0 8px; }
+    p { line-height: 1.7; color: #333; margin-bottom: 10px; }
+    label { display: block; font-weight: 600; margin-bottom: 4px; color: #333; font-size: .9rem; }
+    input[type=text], input[type=email], input[type=password], select, textarea {
+      width: 100%; max-width: 360px; padding: 9px 12px; border: 1.5px solid #b0bec5; border-radius: 6px; font-size: .93rem; margin-bottom: 10px;
+    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: #3f51b5; }
+    code { background: #e8eaf6; padding: 2px 7px; border-radius: 4px; font-family: monospace; font-size: .88em; color: #1a237e; }
+    pre { background: #e8eaf6; border-radius: 8px; padding: 14px 18px; overflow-x: auto; font-size: .85rem; color: #1a237e; margin: 10px 0; }
+    /* Result badges */
+    .expect { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: .75rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin-left: 8px; vertical-align: middle; }
+    .yes  { background: #c8e6c9; color: #1b5e20; }
+    .no   { background: #ffccbc; color: #bf360c; }
+    /* Test rows */
+    .test-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 10px; }
+    @media(max-width:600px) { .test-row { grid-template-columns: 1fr; } }
+    .test-item { padding: 12px 14px; border-radius: 8px; font-size: .9rem; }
+    .translates { background: #f1f8e9; border: 1px solid #aed581; }
+    .no-translate { background: #fff8e1; border: 1px solid #ffb300; }
+    .section-intro { background: #fff; border-radius: 10px; padding: 14px 18px; margin-bottom: 18px; font-size: .9rem; color: #455a64; }
+    .section-intro strong { color: #1a237e; }
+    /* Proxy mode detector banner */
+    .mode-banner { background: #3f51b5; color: #fff; padding: 12px 24px; font-size: .9rem; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .mode-banner strong { font-size: 1rem; }
+    .mode-badge { background: rgba(255,255,255,.2); padding: 3px 12px; border-radius: 20px; font-size: .82rem; }
+    /* Cookie consent demo */
+    #CybotCookiebotDialog { background: #fffde7; border: 2px solid #f9a825; border-radius: 10px; padding: 16px 18px; margin-bottom: 12px; }
+    #onetrust-banner-sdk { background: #e3f2fd; border: 2px solid #1565c0; border-radius: 10px; padding: 16px 18px; margin-bottom: 12px; }
+    .cc-window { background: #f3e5f5; border: 2px solid #7b1fa2; border-radius: 10px; padding: 16px 18px; margin-bottom: 12px; }
+    /* Explicit no-translate examples */
+    .btn { display: inline-block; background: #1a237e; color: #fff !important; padding: 9px 20px; border-radius: 6px; font-weight: 600; border: none; cursor: pointer; font-size: .88rem; margin: 4px; }
+    .btn:hover { background: #283593; text-decoration: none; }
+    input[type=submit] { background: #bf360c; color: #fff; border: none; border-radius: 6px; padding: 10px 22px; font-size: .95rem; font-weight: 700; cursor: pointer; margin-top: 6px; }
+    input[type=submit]:hover { background: #e64a19; }
+    table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    th { background: #e8eaf6; padding: 10px 12px; text-align: left; color: #283593; border-bottom: 2px solid #c5cae9; }
+    td { padding: 10px 12px; border-bottom: 1px solid #e8eaf6; }
+    .loading-demo { min-height: 60px; padding: 12px; background: #fff; border-radius: 8px; border: 1px dashed #b0bec5; }
+  </style>
+</head>
+<body>
+
+<!-- PROXY MODE DETECTOR -->
+<div class="mode-banner" id="mode-banner">
+  <strong>Proxy mode detector:</strong>
+  <span class="mode-badge" id="mode-display">Detecting…</span>
+  <span id="lang-display"></span>
+  <span id="host-display" style="opacity:.7;font-size:.82rem"></span>
+</div>
+
+<nav>
+  <a class="brand" href="/">☕ Kaffeerösterei Kreuzau</a>
+  <a href="/products.html">Shop</a>
+  <a href="/blog.html">Blog</a>
+  <a href="/about.html">About</a>
+  <a href="/contact.html">Contact</a>
+  <a href="/translate-test.html" style="font-weight:700">Test Page</a>
+</nav>
+
+<div class="container">
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <h1>Translation Proxy — Complete Test Suite</h1>
+    <p>This page exercises every behaviour of the translation proxy. When viewed through the proxy in any target language, use the checklist below to verify correct operation. Green rows should be translated; amber rows should remain in the original language.</p>
+    <p><strong>Quick links:</strong>
+      <a href="/login.html">Login</a> ·
+      <a href="/dashboard.html">Dashboard</a> ·
+      <a href="/cart.html">Cart</a> ·
+      <a href="/checkout.html">Checkout</a> ·
+      <a href="/profile.html">Profile</a> ·
+      <a href="/blog.html">Blog</a> ·
+      <a href="/article.html">Article</a> ·
+      <a href="/products.html">Products</a>
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECTION 1: TEXT NODES -->
+  <div class="section">
+    <h2>① Text nodes — all SHOULD translate <span class="expect yes">✓ TRANSLATES</span></h2>
+    <div class="section-intro">Visible text in <strong>h1–h6, p, span, li, td, blockquote, button, a, label</strong> — all translated as text nodes.</div>
+
+    <div class="test-row">
+      <div class="test-item translates">
+        <h3>Heading text</h3>
+        <p>Welcome to our specialty coffee shop. We roast fresh every week.</p>
+      </div>
+      <div class="test-item translates">
+        <h3>List items</h3>
+        <ul style="padding-left:18px;line-height:2">
+          <li>Freshly roasted to order</li>
+          <li>Free delivery over forty euros</li>
+          <li>Thirty-day money-back guarantee</li>
+        </ul>
+      </div>
+    </div>
+    <div class="test-row">
+      <div class="test-item translates">
+        <h3>Button text</h3>
+        <button class="btn" type="button">Add to cart</button>
+        <button class="btn" type="button">View all products</button>
+      </div>
+      <div class="test-item translates">
+        <h3>Anchor text</h3>
+        <p><a href="/products.html">Browse our full range of coffees</a></p>
+        <p><a href="/about.html">Learn about our roasting story</a></p>
+      </div>
+    </div>
+    <div class="test-row">
+      <div class="test-item translates">
+        <h3>Blockquote</h3>
+        <blockquote style="border-left:4px solid #bf360c;padding:10px 16px;background:#faf0ea;border-radius:0 6px 6px 0;margin:0">
+          <p style="font-style:italic;margin:0">"The best coffee I have ever tasted — absolutely exceptional floral notes."</p>
+          <cite style="font-size:.82rem;color:#795548;display:block;margin-top:6px">— Maria Schmidt, verified customer</cite>
+        </blockquote>
+      </div>
+      <div class="test-item translates">
+        <h3>Table cells</h3>
+        <table>
+          <thead><tr><th>Product</th><th>Category</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Espresso Classico</td><td>Dark roast</td><td>In stock</td></tr>
+            <tr><td>Ethiopian Yirgacheffe</td><td>Light roast</td><td>In stock</td></tr>
+            <tr><td>Colombia Huila Decaf</td><td>Decaf</td><td>Out of stock</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECTION 2: ATTRIBUTES -->
+  <div class="section">
+    <h2>② HTML attributes — SHOULD translate <span class="expect yes">✓ TRANSLATES</span></h2>
+    <div class="section-intro">The proxy translates: <strong>alt, title, placeholder, value (submit/button/reset), aria-label, aria-description, aria-placeholder, aria-roledescription, aria-valuetext, data-label</strong>.</div>
+
+    <!-- alt on img -->
+    <h3>alt="" on images <span class="expect yes">✓</span></h3>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px">
+      <figure style="margin:0">
+        <img src="https://picsum.photos/id/30/120/90" alt="Close-up photograph of freshly roasted espresso beans" style="border-radius:8px">
+        <figcaption style="font-size:.78rem;color:#795548;margin-top:4px">alt: "Close-up photograph of freshly roasted espresso beans"</figcaption>
+      </figure>
+      <figure style="margin:0">
+        <img src="https://picsum.photos/id/225/120/90" alt="A farmer hand-picking ripe coffee cherries in the Yirgacheffe highlands" style="border-radius:8px">
+        <figcaption style="font-size:.78rem;color:#795548;margin-top:4px">alt: "A farmer hand-picking ripe coffee cherries in the Yirgacheffe highlands"</figcaption>
+      </figure>
+      <!-- srcset — URLs in srcset should be rewritten if pointing to origin -->
+      <figure style="margin:0">
+        <img
+          src="https://picsum.photos/id/766/120/90"
+          srcset="https://picsum.photos/id/766/240/180 2x, https://picsum.photos/id/766/360/270 3x"
+          alt="A bag of our award-winning Morning Blend coffee with the Kreuzau logo"
+          style="border-radius:8px"
+          title="Morning Blend — our best-selling everyday coffee">
+        <figcaption style="font-size:.78rem;color:#795548;margin-top:4px">alt + title + srcset (srcset URLs rewritten if origin)</figcaption>
+      </figure>
+    </div>
+
+    <!-- title attribute -->
+    <h3>title="" attribute <span class="expect yes">✓</span></h3>
+    <div style="margin-bottom:14px">
+      <span title="Click to expand this section and read more details" style="border-bottom:1px dashed #5d4037;cursor:help;color:#5d4037;font-size:.9rem">Hover over me — my title attribute will be translated</span>
+      &nbsp;&nbsp;
+      <abbr title="Specialty Coffee Association — the global authority on coffee quality standards" style="cursor:help">SCA</abbr>
+    </div>
+
+    <!-- placeholder -->
+    <h3>placeholder="" on form inputs <span class="expect yes">✓</span></h3>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:600px;margin-bottom:14px">
+      <input type="text"     placeholder="Enter your full name here">
+      <input type="email"    placeholder="your@email.com">
+      <input type="password" placeholder="At least 8 characters">
+      <input type="tel"      placeholder="+49 151 23456789">
+      <textarea              placeholder="Write your message here — our team will reply within 24 hours" rows="2" style="max-width:none"></textarea>
+      <select aria-label="Select your country">
+        <option value="">Please select your country</option>
+        <option value="DE">Germany</option>
+        <option value="FR">France</option>
+        <option value="GB">United Kingdom</option>
+      </select>
+    </div>
+
+    <!-- input[type=submit] value -->
+    <h3>input[type=submit/button/reset] value="" <span class="expect yes">✓</span></h3>
+    <div style="margin-bottom:14px">
+      <input type="submit" value="Send my message">
+      <input type="button" value="Load more results" onclick="void(0)" style="margin-left:8px;background:#455a64;color:#fff;border:none;border-radius:6px;padding:10px 22px;cursor:pointer">
+      <input type="reset"  value="Clear the form"  style="margin-left:8px;background:#666;color:#fff;border:none;border-radius:6px;padding:10px 22px;cursor:pointer">
+    </div>
+
+    <!-- ARIA attributes -->
+    <h3>ARIA attributes <span class="expect yes">✓</span></h3>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+      <button class="btn" aria-label="Close the navigation menu" onclick="void(0)">✕ (aria-label: "Close the navigation menu")</button>
+      <button class="btn" aria-label="Add Ethiopian Yirgacheffe 250g to your shopping cart" onclick="void(0)">🛒 (aria-label: "Add Ethiopian Yirgacheffe to cart")</button>
+      <div role="alert" aria-live="assertive" style="padding:8px 12px;background:#ffebee;border-radius:6px;font-size:.88rem" aria-label="Error: Your session has expired. Please sign in again.">
+        aria-label: "Error: Your session has expired. Please sign in again."
+      </div>
+      <div role="progressbar" aria-valuetext="Order is being prepared: 60% complete" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+           style="height:24px;background:#e8eaf6;border-radius:4px;overflow:hidden">
+        <div style="width:60%;height:100%;background:#3f51b5;display:flex;align-items:center;padding-left:10px;color:#fff;font-size:.8rem">aria-valuetext: "60% complete"</div>
+      </div>
+      <input type="text" aria-placeholder="Search our coffee catalogue" aria-description="Type a product name, origin, or roast level"
+             placeholder="Search our coffee catalogue" aria-label="Coffee product search field">
+      <span data-label="Sort products by: Price, low to high" style="font-size:.88rem;color:#666">data-label: "Sort products by: Price, low to high"</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECTION 3: SEO META TAGS -->
+  <div class="section">
+    <h2>③ SEO meta tags — SHOULD translate <span class="expect yes">✓ TRANSLATES</span></h2>
+    <div class="section-intro">Check page source after proxy serves this page. The following tags should have translated content:</div>
+    <table>
+      <thead><tr><th>Tag</th><th>Original value</th><th>Expected</th></tr></thead>
+      <tbody>
+        <tr><td><code>&lt;title&gt;</code></td><td>Translation Proxy — Complete Test Suite</td><td><span class="expect yes">Translated</span></td></tr>
+        <tr><td><code>meta[name="description"]</code></td><td>A comprehensive test page verifying every translation proxy behaviour…</td><td><span class="expect yes">Translated</span></td></tr>
+        <tr><td><code>meta[property="og:title"]</code></td><td>Translation Proxy — Complete Test Suite</td><td><span class="expect yes">Translated</span></td></tr>
+        <tr><td><code>meta[property="og:description"]</code></td><td>Verify every proxy behaviour…</td><td><span class="expect yes">Translated</span></td></tr>
+        <tr><td><code>meta[property="og:site_name"]</code></td><td>Kaffeerösterei Kreuzau</td><td><span class="expect yes">Translated</span></td></tr>
+        <tr><td><code>meta[name="twitter:title"]</code></td><td>Translation Proxy — Complete Test Suite</td><td><span class="expect yes">Translated</span></td></tr>
+        <tr><td><code>meta[name="twitter:description"]</code></td><td>Verify every proxy behaviour…</td><td><span class="expect yes">Translated</span></td></tr>
+        <tr><td><code>meta[property="og:locale"]</code></td><td>en_US</td><td><span class="expect yes">Rewritten to target locale</span></td></tr>
+        <tr><td><code>html[lang]</code></td><td>en</td><td><span class="expect yes">Rewritten to target lang code</span></td></tr>
+        <tr><td><code>link[rel="canonical"]</code></td><td>(injected by proxy)</td><td><span class="expect yes">Injected with proxy URL</span></td></tr>
+        <tr><td><code>link[rel="alternate"][hreflang]</code></td><td>(injected by proxy)</td><td><span class="expect yes">One per available language</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECTION 4: CONTENT THAT MUST NOT TRANSLATE -->
+  <div class="section">
+    <h2>④ No-translate cases — MUST stay in source language <span class="expect no">✗ KEEPS ORIGINAL</span></h2>
+
+    <!-- 4a: script tag content -->
+    <h3>4a. &lt;script&gt; tag content <span class="expect no">✗</span></h3>
+    <div class="section-intro">JavaScript code inside &lt;script&gt; tags is never sent to the translation provider. This is intentional — translating JS would break the site.</div>
+    <!-- Script content is untouched. Any text rendered BY this script IS seen by the retranslation observer. -->
+    <script id="demo-script">
+    // This JavaScript string should NOT be translated — it is inside a <script> tag
+    var CONFIG = {
+      apiUrl: '/api/v2',
+      shopName: 'Kaffeerösterei Kreuzau',
+      currency: 'EUR',
+      locale: 'en-DE'
+    };
+    // Right-click and "View Page Source" to verify these strings are unchanged after proxy
+    </script>
+    <p style="font-size:.88rem;color:#555">View page source to confirm the <code>id="demo-script"</code> script block above contains untranslated JS.</p>
+
+    <!-- 4b: style tag content -->
+    <h3>4b. &lt;style&gt; tag content <span class="expect no">✗</span></h3>
+    <style id="demo-style">
+    /* This CSS comment should NOT be translated */
+    .proxy-test { color: red; font-size: 14px; }
+    </style>
+    <p style="font-size:.88rem;color:#555">CSS inside &lt;style&gt; tags is never translated. View source to verify.</p>
+
+    <!-- 4c: code and pre blocks -->
+    <h3>4c. &lt;code&gt; and &lt;pre&gt; tag content <span class="expect no">✗</span></h3>
+    <div class="no-translate" style="background:#fff8e1;border:1px solid #ffb300;border-radius:8px;padding:14px 16px;margin-bottom:10px">
+      <p style="margin-bottom:8px">Inline code (stays in English):</p>
+      <p>Install the package with: <code>npm install @kaffee/proxy-client --save</code></p>
+      <p>Set the environment variable: <code>PROXY_API_KEY=pk_live_abc123def456</code></p>
+    </div>
+    <div class="no-translate" style="background:#fff8e1;border:1px solid #ffb300;border-radius:8px;padding:14px 16px">
+      <p style="margin-bottom:8px">Code block (stays in English):</p>
+      <pre><code>// Configure the proxy client
+const proxy = new KaffeeProxy({
+  apiKey: process.env.PROXY_API_KEY,
+  targetLang: 'fr',
+  originUrl: 'https://my-shop.de'
+});
+
+// Translate a page
+const translated = await proxy.translate('/products.html');</code></pre>
+    </div>
+
+    <!-- 4d: translate="no" attribute -->
+    <h3>4d. <code>translate="no"</code> attribute <span class="expect no">✗</span></h3>
+    <div class="no-translate" style="background:#fff8e1;border:1px solid #ffb300;border-radius:8px;padding:14px 16px;margin-bottom:10px">
+      <p>The following elements carry <code>translate="no"</code>:</p>
+      <p>Brand name: <span translate="no" style="font-weight:700">Kaffeerösterei Kreuzau GmbH</span></p>
+      <p>Technical string: <span translate="no">SHA-256:8f14e45fcce58a35a7b6b5c3f8e1a2b9c4d0e7f1g2h</span></p>
+      <p>Trademark: <span translate="no">ProxyLingo™ Translation Engine v3.2.1</span></p>
+      <div translate="no" style="background:#f5f0ee;padding:10px 12px;border-radius:6px;margin-top:8px">
+        <p style="margin:0">This entire div with translate="no" should remain untranslated, including this child paragraph and all its descendants.</p>
+      </div>
+    </div>
+
+    <!-- 4e: data-proxy-notranslate -->
+    <h3>4e. <code>data-proxy-notranslate</code> attribute <span class="expect no">✗</span></h3>
+    <div class="no-translate" style="background:#fff8e1;border:1px solid #ffb300;border-radius:8px;padding:14px 16px;margin-bottom:10px">
+      <p>Prices (should NOT be translated to prevent currency mangling):</p>
+      <p>Price: <span data-proxy-notranslate style="font-weight:700;font-size:1.1rem">€12.90</span></p>
+      <p>Discount: <span data-proxy-notranslate>−€2.00 (was €14.90)</span></p>
+      <p>Subscription cost: <span data-proxy-notranslate>€22.90/month</span></p>
+      <div data-proxy-notranslate style="background:#f5f0ee;padding:10px 12px;border-radius:6px;margin-top:8px">
+        This entire block with data-proxy-notranslate should remain untranslated. Even deeply nested text. €99.99 — do not translate this.
+      </div>
+    </div>
+
+    <!-- 4f: data-wg-notranslate -->
+    <h3>4f. <code>data-wg-notranslate</code> attribute <span class="expect no">✗</span></h3>
+    <div class="no-translate" style="background:#fff8e1;border:1px solid #ffb300;border-radius:8px;padding:14px 16px;margin-bottom:10px">
+      <p>Compatible with Weglot's no-translate marker:</p>
+      <span data-wg-notranslate style="display:block;background:#f5f0ee;padding:8px 12px;border-radius:6px">This text uses data-wg-notranslate and should not be translated — it is compatible with Weglot-style exclusions.</span>
+    </div>
+
+    <!-- 4g: SVG and Math -->
+    <h3>4g. SVG and Math content <span class="expect no">✗</span></h3>
+    <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
+      <svg width="120" height="60" viewBox="0 0 120 60" style="border:1px solid #d7ccc8;border-radius:8px" aria-label="Coffee cup logo SVG">
+        <text x="10" y="35" font-size="14" fill="#3e2723">☕ Coffee</text>
+        <text x="10" y="52" font-size="10" fill="#795548">SVG — not translated</text>
+      </svg>
+      <div style="font-size:.88rem;color:#555">Text inside &lt;svg&gt; is skipped by the proxy (in _SKIP_TAGS). The <code>aria-label</code> on the SVG element itself IS translated.</div>
+    </div>
+
+    <!-- 4h: <noscript> and <textarea> -->
+    <h3>4h. &lt;noscript&gt; and &lt;textarea&gt; content <span class="expect no">✗</span></h3>
+    <noscript><p style="color:#c62828">This noscript content should NOT be translated.</p></noscript>
+    <textarea rows="2" style="max-width:400px" aria-label="User comment field">Pre-filled textarea content — this value is NOT translated. The placeholder and aria-label ARE translated.</textarea>
+
+    <!-- 4i: Cookie consent banners -->
+    <h3>4i. Cookie consent banners — auto-protected <span class="expect no">✗</span></h3>
+    <div class="section-intro">The proxy automatically marks cookie consent banners with <code>data-proxy-notranslate</code> before translation. These use real vendor CSS IDs/classes so the auto-detection fires.</div>
+    <div id="CybotCookiebotDialog" role="dialog" aria-label="cookieconsent">
+      <strong>Cookiebot consent banner</strong>
+      <p>This site uses cookies to improve your experience. By clicking "Accept all", you consent to the use of all cookies.</p>
+      <button>Accept all cookies</button> <button>Reject</button>
+    </div>
+    <div id="onetrust-banner-sdk">
+      <strong>OneTrust consent banner</strong>
+      <p>We use cookies to personalise content, provide social media features, and analyse our traffic. Accept all or manage preferences.</p>
+      <button>Accept all</button> <button>Manage preferences</button>
+    </div>
+    <div class="cc-window">
+      <strong>CookieConsent (Osano) banner</strong>
+      <p>This website uses cookies to ensure you get the best experience. By continuing, you agree to our cookie policy.</p>
+      <button>Got it!</button> <a href="/privacy.html">Learn more</a>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECTION 5: URL REWRITING -->
+  <div class="section">
+    <h2>⑤ URL rewriting — links stay on proxy domain <span class="expect yes">✓ REWRITTEN</span></h2>
+    <div class="section-intro">In <strong>subdirectory mode</strong>, internal links get a <code>/{lang}</code> prefix. In <strong>subdomain mode</strong>, the domain changes. Check the <code>href</code> values in page source.</div>
+    <table>
+      <thead><tr><th>Type</th><th>Original</th><th>Expected after proxy</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Root-relative</td>
+          <td><a href="/products.html">/products.html</a></td>
+          <td><span class="expect yes">→ /fr/products.html (subdirectory)</span></td>
+        </tr>
+        <tr>
+          <td>Root-relative</td>
+          <td><a href="/cart.html">/cart.html</a></td>
+          <td><span class="expect yes">→ /fr/cart.html</span></td>
+        </tr>
+        <tr>
+          <td>Absolute (origin)</td>
+          <td><a href="https://xn--kaffeerstreikreuzau-w6b.de/about.html">Absolute origin URL</a></td>
+          <td><span class="expect yes">→ https://proxy.com/fr/about.html</span></td>
+        </tr>
+        <tr>
+          <td>Form action</td>
+          <td><code>form action="/api/auth/login"</code></td>
+          <td><span class="expect yes">→ /fr/api/auth/login</span></td>
+        </tr>
+        <tr>
+          <td>Relative link</td>
+          <td><a href="products.html">products.html (relative)</a></td>
+          <td><span class="expect yes">Left as-is (browser resolves under lang prefix)</span></td>
+        </tr>
+        <tr>
+          <td>JSON-LD @id / url</td>
+          <td><code>"url": "https://origin.com/products.html"</code></td>
+          <td><span class="expect yes">→ https://proxy.com/fr/products.html</span></td>
+        </tr>
+        <tr>
+          <td>og:url</td>
+          <td><code>og:url = "https://origin.com/translate-test.html"</code></td>
+          <td><span class="expect yes">→ https://proxy.com/fr/translate-test.html</span></td>
+        </tr>
+        <tr>
+          <td>External URL</td>
+          <td><a href="https://schema.org/Product">schema.org/Product</a></td>
+          <td><span class="expect no">NOT rewritten (external domain)</span></td>
+        </tr>
+        <tr>
+          <td>mailto:</td>
+          <td><a href="mailto:hello@kreuzau-kaffee.de">mailto: link</a></td>
+          <td><span class="expect no">NOT rewritten</span></td>
+        </tr>
+        <tr>
+          <td>tel:</td>
+          <td><a href="tel:+4924221234">tel: link</a></td>
+          <td><span class="expect no">NOT rewritten</span></td>
+        </tr>
+        <tr>
+          <td>data: URI</td>
+          <td><code>data:image/png;base64,abc123</code></td>
+          <td><span class="expect no">NOT rewritten</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Form with action to verify rewriting -->
+    <form action="/api/contact" method="POST" style="margin-top:20px;padding:14px;background:#fff;border-radius:8px;max-width:400px">
+      <p style="font-size:.88rem;color:#555;margin-bottom:8px">Form action <code>/api/contact</code> → will be rewritten to <code>/fr/api/contact</code> in subdirectory mode. Check HTML source.</p>
+      <input type="email" placeholder="your@email.com" name="email" style="max-width:none;margin-bottom:6px">
+      <input type="submit" value="Test form submission">
+    </form>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECTION 6: JSON-LD STRUCTURED DATA -->
+  <div class="section">
+    <h2>⑥ JSON-LD structured data — partial translate <span class="expect yes">✓ TEXT FIELDS</span> <span class="expect no">✗ URLS</span></h2>
+    <div class="section-intro">Check page source for the <code>application/ld+json</code> scripts. Text keys (<strong>name, description, headline, reviewBody, question, text</strong>) should be translated. URL keys (<strong>@id, url, image, sameAs</strong>) should be rewritten to the proxy domain but never translated.</div>
+    <table>
+      <thead><tr><th>JSON-LD field</th><th>Type</th><th>Expected</th></tr></thead>
+      <tbody>
+        <tr><td><code>"name": "Translation Test Product…"</code></td><td>text key</td><td><span class="expect yes">Translated</span></td></tr>
+        <tr><td><code>"description": "A sample product…"</code></td><td>text key</td><td><span class="expect yes">Translated</span></td></tr>
+        <tr><td><code>"headline": "This headline…"</code></td><td>text key</td><td><span class="expect yes">Translated</span></td></tr>
+        <tr><td><code>"reviewBody": "Absolutely exceptional…"</code></td><td>text key</td><td><span class="expect yes">Translated</span></td></tr>
+        <tr><td><code>"@id": "https://origin.com/…#product"</code></td><td>id key</td><td><span class="expect yes">URL rewritten to proxy</span></td></tr>
+        <tr><td><code>"url": "https://origin.com/products.html"</code></td><td>url key</td><td><span class="expect yes">URL rewritten to proxy</span></td></tr>
+        <tr><td><code>"image": "https://origin.com/…"</code></td><td>url key</td><td><span class="expect no">NOT translated (URL left as-is or rewritten)</span></td></tr>
+        <tr><td><code>"sameAs": "https://www.wikidata.org/…"</code></td><td>url key</td><td><span class="expect no">NOT rewritten (external domain)</span></td></tr>
+        <tr><td><code>"inLanguage": "en"</code></td><td>inLanguage</td><td><span class="expect yes">Rewritten to target language code</span></td></tr>
+        <tr><td>FAQ Question name</td><td>text key</td><td><span class="expect yes">Translated</span></td></tr>
+        <tr><td>FAQ Answer text</td><td>text key</td><td><span class="expect yes">Translated</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECTION 7: DYNAMIC CONTENT (MUTATION OBSERVER) -->
+  <div class="section">
+    <h2>⑦ Dynamic content — retranslation observer <span class="expect yes">✓ TRANSLATES (if js_retranslation=true)</span></h2>
+    <div class="section-intro">When <strong>js_retranslation</strong> is enabled in the proxy config, a MutationObserver watches for new text nodes added by JavaScript and sends them to <code>/proxy-translate-batch</code>. The items below are injected AFTER page load — watch if they get translated.</div>
+
+    <div id="dynamic-demo-1" class="loading-demo">
+      <p style="color:#b0bec5;font-size:.88rem">Loading dynamic content… (appears after 1.5 seconds)</p>
+    </div>
+    <div id="dynamic-demo-2" class="loading-demo" style="margin-top:10px">
+      <p style="color:#b0bec5;font-size:.88rem">Loading more dynamic content… (appears after 3 seconds)</p>
+    </div>
+    <div id="dynamic-demo-3" class="loading-demo" style="margin-top:10px">
+      <p style="color:#b0bec5;font-size:.88rem">Loading tab content… (click the tabs below)</p>
+    </div>
+
+    <!-- Tab switcher (tests attribute changes observed by MutationObserver) -->
+    <div style="margin-top:14px">
+      <div style="display:flex;gap:6px;margin-bottom:0">
+        <button class="btn" onclick="switchTab('overview')"   id="tab-overview"   aria-selected="true"  aria-controls="panel-overview">Product overview</button>
+        <button class="btn" onclick="switchTab('reviews')"    id="tab-reviews"    aria-selected="false" aria-controls="panel-reviews">Customer reviews</button>
+        <button class="btn" onclick="switchTab('shipping')"   id="tab-shipping"   aria-selected="false" aria-controls="panel-shipping">Shipping information</button>
+      </div>
+      <div id="panel-overview" role="tabpanel" class="loading-demo" style="border-radius:0 8px 8px 8px;padding:16px"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECTION 8: EDGE CASES -->
+  <div class="section">
+    <h2>⑧ Edge cases and complex patterns</h2>
+
+    <!-- Mixed content: some translates, some doesn't -->
+    <h3>Mixed inline content</h3>
+    <p style="margin-bottom:14px">
+      This paragraph contains translatable text, then a no-translate code snippet
+      (<code>api_key=sk-test-abc123</code>), then more translatable text about how to use it in your application.
+    </p>
+
+    <!-- Nested no-translate inside translatable -->
+    <h3>Nested translate/no-translate</h3>
+    <div style="background:#fff;padding:14px;border-radius:8px;margin-bottom:14px;border:1px solid #d7ccc8">
+      <p>This outer paragraph is translatable and should appear in the target language.
+         The price <span data-proxy-notranslate>€12.90</span> must stay as-is.
+         But this text after the price should also be translated.</p>
+      <p>Inside a translatable section, specific words like
+         <span translate="no">Kaffeerösterei</span> can remain in their original form.</p>
+    </div>
+
+    <!-- Numbers, dates, emails in body text -->
+    <h3>Numbers, emails, and dates in body text</h3>
+    <div style="background:#fff;padding:14px;border-radius:8px;margin-bottom:14px;border:1px solid #d7ccc8">
+      <p>Contact us at hello@kreuzau-kaffee.de or call +49 2422 12345 between Monday and Friday.</p>
+      <p>Our address is Rurstraße 12, 52372 Kreuzau, Germany. Orders over €40 qualify for free delivery.</p>
+      <p><strong>Note:</strong> Emails and phone numbers in body text ARE sent to the translator (they are just text nodes). Use <code>data-proxy-notranslate</code> on the parent element to protect them.</p>
+    </div>
+
+    <!-- Long text that tests batching -->
+    <h3>Long content (batching test)</h3>
+    <p>The proxy batches text nodes and sends them in groups to the translation provider. This paragraph is deliberately longer than the others to test that large text blocks are correctly handled, translated in full, and reassembled without losing context or breaking mid-sentence. The proxy must correctly associate each translated string with its original DOM node even when strings arrive out of order from the translation API. This tests the index-based write-back mechanism in the HTML rewriter pipeline.</p>
+  </div>
+
+</div><!-- /container -->
+
+<footer>
+  <div style="max-width:1000px;margin:0 auto;padding:0 24px">
+    <p>© 2025 Kaffeerösterei Kreuzau · <a href="/contact.html">Contact</a> · <a href="/privacy.html">Privacy</a> · <a href="/translate-test.html">Test Suite</a></p>
+  </div>
+</footer>
+
+<!-- NO-TRANSLATE: JS content — but text injected into DOM IS seen by retranslation observer -->
+<script>
+// Proxy mode detection
+(function() {
+  var path = window.location.pathname;
+  var host = window.location.hostname;
+  var subMatch = host.match(/^([a-z]{2,3})(?:-[a-z]{2})?\.(.+)/);
+  var pathMatch = path.match(/^\/([a-z]{2}(?:-[a-z]{2})?)(\/|$)/);
+  var mode, lang;
+  if (subMatch) {
+    mode = 'Subdomain mode';
+    lang = subMatch[1].toUpperCase();
+  } else if (pathMatch) {
+    mode = 'Subdirectory mode';
+    lang = pathMatch[1].toUpperCase();
+  } else {
+    mode = 'Original (not proxied)';
+    lang = 'EN';
+  }
+  document.getElementById('mode-display').textContent = mode;
+  document.getElementById('lang-display').textContent = lang !== 'EN' || mode !== 'Original (not proxied)' ? '· Language: ' + lang : '· Viewing original';
+  document.getElementById('host-display').textContent = '· Host: ' + host;
+})();
+
+// Dynamic content — injected after timeout (tests MutationObserver retranslation)
+setTimeout(function() {
+  var el = document.getElementById('dynamic-demo-1');
+  el.innerHTML = [
+    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">',
+    '<div style="background:#e8f5e9;padding:12px;border-radius:8px"><strong>Free delivery</strong><p style="margin:4px 0 0;font-size:.85rem">On all orders over forty euros</p></div>',
+    '<div style="background:#e3f2fd;padding:12px;border-radius:8px"><strong>Fresh roasted</strong><p style="margin:4px 0 0;font-size:.85rem">Dispatched within two business days</p></div>',
+    '<div style="background:#fff3e0;padding:12px;border-radius:8px"><strong>Money-back guarantee</strong><p style="margin:4px 0 0;font-size:.85rem">Thirty days, no questions asked</p></div>',
+    '</div>'
+  ].join('');
+}, 1500);
+
+setTimeout(function() {
+  var el = document.getElementById('dynamic-demo-2');
+  el.innerHTML = [
+    '<h4 style="color:#1a237e;margin-bottom:10px">Recently viewed products</h4>',
+    '<div style="display:flex;gap:14px;flex-wrap:wrap">',
+    '<div style="display:flex;gap:10px;align-items:center;background:#fff;padding:10px;border-radius:8px;border:1px solid #e0e0e0"><img src="https://picsum.photos/id/30/50/50" alt="Espresso Classico" style="border-radius:6px"><div><p style="font-weight:600;font-size:.88rem;margin:0">Espresso Classico</p><p style="font-size:.82rem;color:#795548;margin:2px 0 0">Dark roast · In stock</p></div></div>',
+    '<div style="display:flex;gap:10px;align-items:center;background:#fff;padding:10px;border-radius:8px;border:1px solid #e0e0e0"><img src="https://picsum.photos/id/225/50/50" alt="Ethiopian Yirgacheffe" style="border-radius:6px"><div><p style="font-weight:600;font-size:.88rem;margin:0">Ethiopian Yirgacheffe</p><p style="font-size:.82rem;color:#795548;margin:2px 0 0">Light roast · In stock</p></div></div>',
+    '</div>'
+  ].join('');
+}, 3000);
+
+// Tab content (dynamically rendered when tab is switched)
+var TAB_CONTENT = {
+  overview: '<p><strong>Product overview</strong></p><p>A comprehensive range of specialty coffees, roasted fresh every week in our Kreuzau facility. Each coffee is sourced directly from farmers who share our commitment to quality and sustainability.</p><ul style="padding-left:18px;line-height:1.8"><li>Single-origin and blended coffees available</li><li>Whole bean or ground to your specification</li><li>Available in 250g and 500g sizes</li><li>Roasted to order — never sits in a warehouse</li></ul>',
+  reviews:  '<p><strong>Customer reviews</strong></p><div style="display:flex;flex-direction:column;gap:10px"><div style="background:#f9f9f9;padding:12px;border-radius:6px"><strong>⭐⭐⭐⭐⭐ Maria S.</strong><p style="margin:4px 0 0;font-size:.9rem">Absolutely the best espresso I have had outside of Italy. Delivered fresh and perfectly roasted.</p></div><div style="background:#f9f9f9;padding:12px;border-radius:6px"><strong>⭐⭐⭐⭐⭐ Thomas K.</strong><p style="margin:4px 0 0;font-size:.9rem">The Ethiopian Yirgacheffe is extraordinary. Floral, bright, and complex. I will never drink supermarket coffee again.</p></div></div>',
+  shipping: '<p><strong>Shipping information</strong></p><ul style="padding-left:18px;line-height:1.8"><li>Standard delivery: 3–5 business days (DHL tracked)</li><li>Express delivery: 1–2 business days (DHL Express)</li><li>Free standard delivery on orders over €40</li><li>All orders dispatched within 2 business days of roasting</li><li>Delivery to Germany, Austria, Switzerland, and all EU countries</li></ul>'
+};
+
+function switchTab(tab) {
+  document.getElementById('panel-overview').innerHTML = TAB_CONTENT[tab] || '';
+  ['overview','reviews','shipping'].forEach(function(t) {
+    var btn = document.getElementById('tab-' + t);
+    btn.style.opacity = t === tab ? '1' : '0.6';
+    btn.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+  });
+}
+
+// Initialize first tab
+document.addEventListener('DOMContentLoaded', function() {
+  switchTab('overview');
+});
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(function(){});
+}
+</script>
+</body>
+</html>

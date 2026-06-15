@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Settings — Kaffeerösterei Kreuzau</title>
+  <meta name="description" content="Update your personal details, delivery addresses, coffee preferences, and notification settings.">
+  <meta property="og:title"       content="Account Settings — Kaffeerösterei Kreuzau">
+  <meta property="og:description" content="Manage your account details, preferences, and subscription settings.">
+  <meta property="og:url"         content="https://xn--kaffeerstreikreuzau-w6b.de/profile.html">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a1a1a; background: #f5f0ee; }
+    a { color: #5d4037; text-decoration: none; } a:hover { text-decoration: underline; }
+    nav { background: #3e2723; padding: 0 20px; display: flex; align-items: center; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    nav .brand { color: #fff; font-size: 1.05rem; font-weight: 700; padding: 16px 0; margin-right: auto; text-decoration: none; }
+    nav a { color: #efebe9; padding: 16px 11px; font-size: .88rem; display: inline-block; }
+    nav a:hover { color: #fff; background: rgba(255,255,255,.1); text-decoration: none; }
+    footer { background: #3e2723; color: #efebe9; padding: 28px 0; text-align: center; margin-top: 48px; }
+    footer a { color: #ffccbc; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .page-header { background: #3e2723; color: #fff; padding: 24px 0; }
+    .page-header h1 { color: #fff; font-size: 1.6rem; }
+    h2 { font-size: 1.1rem; color: #3e2723; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #f0e9e4; }
+    p { line-height: 1.6; color: #555; margin-bottom: 10px; }
+    label { display: block; font-weight: 600; margin-bottom: 4px; color: #3e2723; font-size: .9rem; }
+    input[type=text], input[type=email], input[type=password], input[type=tel], select, textarea {
+      width: 100%; padding: 10px 13px; border: 1.5px solid #d7ccc8; border-radius: 7px; font-size: .93rem; background: #fff;
+    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: #bf360c; }
+    .hint { font-size: .8rem; color: #795548; margin-top: 3px; }
+    .btn { display: inline-block; background: #bf360c; color: #fff !important; padding: 10px 22px; border-radius: 6px; font-weight: 600; border: none; cursor: pointer; font-size: .9rem; }
+    .btn:hover { background: #e64a19; text-decoration: none; }
+    .btn-outline { background: transparent !important; color: #bf360c !important; border: 2px solid #bf360c; }
+    .btn-outline:hover { background: #bf360c !important; color: #fff !important; }
+    .btn-danger { background: #c62828 !important; }
+    .btn-danger:hover { background: #e53935 !important; }
+    .layout { display: grid; grid-template-columns: 220px 1fr; gap: 24px; padding: 28px 0; }
+    @media(max-width:768px) { .layout { grid-template-columns: 1fr; } }
+    .sidebar-nav { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+    .sidebar-nav a { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid #f0e9e4; color: #4e342e; font-size: .9rem; }
+    .sidebar-nav a:hover { background: #faf0ea; text-decoration: none; }
+    .sidebar-nav a.active { background: #bf360c; color: #fff; font-weight: 600; }
+    .card { background: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,.06); padding: 22px 24px; margin-bottom: 20px; }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .fg { margin-bottom: 14px; }
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f0e9e4; }
+    .toggle-row:last-child { border-bottom: none; }
+    .toggle-row .info strong { font-size: .93rem; color: #3e2723; display: block; margin-bottom: 2px; }
+    .toggle-row .info span { font-size: .82rem; color: #795548; }
+    .toggle { position: relative; width: 44px; height: 24px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; inset: 0; background: #d7ccc8; border-radius: 24px; cursor: pointer; transition: background .2s; }
+    .toggle-slider::before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: transform .2s; }
+    .toggle input:checked + .toggle-slider { background: #bf360c; }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(20px); }
+    .alert { padding: 12px 16px; border-radius: 7px; margin-bottom: 14px; font-size: .92rem; display: none; }
+    .alert-success { background: #e8f5e9; border: 1px solid #a5d6a7; color: #2e7d32; }
+    .alert-error   { background: #ffebee; border: 1px solid #ef9a9a; color: #c62828; }
+    code { background: #f0e9e4; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: .88em; }
+    .api-key-row { display: flex; align-items: center; gap: 10px; }
+    .api-key-row code { flex: 1; word-break: break-all; }
+    .danger-zone { border: 2px solid #ef9a9a; border-radius: 12px; padding: 20px 24px; margin-top: 20px; background: #fff9f9; }
+    .danger-zone h2 { color: #c62828; border-bottom-color: #ef9a9a; }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="brand" href="/">☕ Kaffeerösterei Kreuzau</a>
+  <a href="/products.html">Shop</a>
+  <a href="/blog.html">Blog</a>
+  <a href="/about.html">About</a>
+  <a href="/contact.html">Contact</a>
+  <a href="/cart.html">🛒 Cart</a>
+  <a href="/dashboard.html">My Account</a>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <h1>Account Settings</h1>
+  </div>
+</header>
+
+<div class="container">
+  <div class="layout">
+    <!-- TRANSLATES: sidebar nav labels -->
+    <aside>
+      <nav class="sidebar-nav" aria-label="Settings sections">
+        <a href="/dashboard.html">📦 Order History</a>
+        <a href="/profile.html" class="active" aria-current="page">👤 Personal Details</a>
+        <a href="#security">🔐 Security</a>
+        <a href="#notifications">🔔 Notifications</a>
+        <a href="#preferences">☕ Coffee Preferences</a>
+        <a href="#api">🔑 API Access</a>
+        <a href="#danger">⚠️ Danger Zone</a>
+      </nav>
+    </aside>
+
+    <main>
+      <div class="alert alert-success" id="succ" role="status" aria-live="polite"></div>
+      <div class="alert alert-error"   id="err"  role="alert"  aria-live="assertive"></div>
+
+      <!-- PERSONAL DETAILS — TRANSLATES: all labels, placeholders, hints -->
+      <div class="card">
+        <h2>Personal details</h2>
+        <form id="profile-form" action="/api/profile" method="POST">
+          <div class="row-2">
+            <div class="fg">
+              <label for="firstName">First name</label>
+              <input type="text" id="firstName" name="firstName" value="Demo"
+                     placeholder="Maria" autocomplete="given-name"
+                     aria-label="Your first name">
+            </div>
+            <div class="fg">
+              <label for="lastName">Last name</label>
+              <input type="text" id="lastName" name="lastName" value="User"
+                     placeholder="Müller" autocomplete="family-name"
+                     aria-label="Your last name">
+            </div>
+          </div>
+          <div class="fg">
+            <label for="email">Email address</label>
+            <input type="email" id="email" name="email" value="demo@example.com"
+                   autocomplete="email" aria-label="Your email address"
+                   aria-describedby="email-hint">
+            <p class="hint" id="email-hint">Changing your email requires verification by clicking a link in the confirmation email</p>
+          </div>
+          <div class="fg">
+            <label for="phone">Phone number</label>
+            <input type="tel" id="phone" name="phone" value="+49 151 23456789"
+                   placeholder="+49 151 23456789" autocomplete="tel"
+                   aria-label="Your phone number">
+          </div>
+          <div class="fg">
+            <label for="dob">Date of birth (optional)</label>
+            <input type="text" id="dob" name="dob" value="1988-04-12"
+                   placeholder="YYYY-MM-DD" autocomplete="bday"
+                   aria-label="Your date of birth">
+            <p class="hint">We use this to send you a birthday surprise 🎁</p>
+          </div>
+          <button type="submit" class="btn" aria-label="Save changes to personal details">Save changes</button>
+        </form>
+      </div>
+
+      <!-- SECURITY — TRANSLATES: labels, hints -->
+      <div class="card" id="security">
+        <h2>Password and security</h2>
+        <form id="password-form" action="/api/auth/change-password" method="POST" style="margin-bottom:20px">
+          <div class="fg">
+            <label for="currentPassword">Current password</label>
+            <input type="password" id="currentPassword" name="currentPassword"
+                   placeholder="Enter your current password"
+                   autocomplete="current-password"
+                   aria-label="Your current password">
+          </div>
+          <div class="fg">
+            <label for="newPassword">New password</label>
+            <input type="password" id="newPassword" name="newPassword"
+                   placeholder="At least 8 characters"
+                   autocomplete="new-password" minlength="8"
+                   aria-label="Choose a new password">
+          </div>
+          <div class="fg">
+            <label for="confirmPassword">Confirm new password</label>
+            <input type="password" id="confirmPassword" name="confirmPassword"
+                   placeholder="Repeat your new password"
+                   autocomplete="new-password"
+                   aria-label="Confirm your new password">
+          </div>
+          <button type="submit" class="btn">Update password</button>
+        </form>
+
+        <!-- TRANSLATES: MFA description -->
+        <div style="padding-top:16px;border-top:1px solid #f0e9e4">
+          <h3 style="font-size:.95rem;color:#3e2723;margin-bottom:6px">Two-factor authentication (2FA)</h3>
+          <p style="font-size:.88rem;margin-bottom:10px">Add an extra layer of security to your account. We support authentication apps like Google Authenticator and Authy.</p>
+          <button class="btn btn-outline" onclick="alert('2FA setup is simulated in this demo.')">Enable two-factor authentication</button>
+        </div>
+      </div>
+
+      <!-- NOTIFICATIONS — TRANSLATES: toggle labels and descriptions -->
+      <div class="card" id="notifications">
+        <h2>Notification preferences</h2>
+
+        <div class="toggle-row">
+          <div class="info">
+            <strong>Order dispatch notifications</strong>
+            <span>Receive an email when your order has been shipped, including your tracking number</span>
+          </div>
+          <label class="toggle" aria-label="Toggle order dispatch notifications">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div class="info">
+            <strong>Subscription reminders</strong>
+            <span>Be notified 3 days before your next subscription delivery is prepared</span>
+          </div>
+          <label class="toggle" aria-label="Toggle subscription reminders">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div class="info">
+            <strong>New roast announcements</strong>
+            <span>Be the first to know when we release a new single-origin coffee or limited edition roast</span>
+          </div>
+          <label class="toggle" aria-label="Toggle new roast announcements">
+            <input type="checkbox">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div class="info">
+            <strong>Loyalty point updates</strong>
+            <span>Get notified when you earn or spend loyalty points, and when new rewards become available</span>
+          </div>
+          <label class="toggle" aria-label="Toggle loyalty point notifications">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div class="info">
+            <strong>Marketing and promotional emails</strong>
+            <span>Exclusive discount codes, seasonal promotions, and special events</span>
+          </div>
+          <label class="toggle" aria-label="Toggle marketing emails">
+            <input type="checkbox">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <button class="btn" style="margin-top:16px" onclick="alert('Notification preferences saved.')">Save preferences</button>
+      </div>
+
+      <!-- COFFEE PREFERENCES — TRANSLATES: select options, labels -->
+      <div class="card" id="preferences">
+        <h2>Coffee preferences</h2>
+        <p>Help us personalise your recommendations and subscription selections.</p>
+        <form id="prefs-form" action="/api/preferences" method="POST">
+          <div class="row-2" style="margin-top:14px">
+            <div class="fg">
+              <label for="preferredRoast">Preferred roast level</label>
+              <select id="preferredRoast" name="preferredRoast" aria-label="Select your preferred roast level">
+                <option value="light">Light roast — fruity and floral</option>
+                <option value="medium">Medium roast — balanced and smooth</option>
+                <option value="dark" selected>Dark roast — rich and bold</option>
+                <option value="any">No preference — surprise me!</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label for="brewingMethod">Primary brewing method</label>
+              <select id="brewingMethod" name="brewingMethod" aria-label="Select your primary brewing method">
+                <option value="espresso" selected>Espresso machine</option>
+                <option value="pourover">Pour-over / V60</option>
+                <option value="frenchpress">French press</option>
+                <option value="aeropress">AeroPress</option>
+                <option value="mokapot">Moka pot</option>
+                <option value="capsule">Capsule / pod machine</option>
+                <option value="coldbrew">Cold brew</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label for="grindSize">Preferred grind size</label>
+              <select id="grindSize" name="grindSize" aria-label="Select your preferred grind size">
+                <option value="whole">Whole beans (I grind myself)</option>
+                <option value="fine" selected>Fine (for espresso)</option>
+                <option value="medium">Medium (for pour-over)</option>
+                <option value="coarse">Coarse (for French press)</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label for="flavorProfile">Flavour notes preference</label>
+              <select id="flavorProfile" name="flavorProfile" aria-label="Select your preferred flavour profile">
+                <option value="chocolate">Chocolate and nutty</option>
+                <option value="fruity">Fruity and bright</option>
+                <option value="floral">Floral and delicate</option>
+                <option value="balanced">Balanced and versatile</option>
+                <option value="earthy">Earthy and bold</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn">Save coffee preferences</button>
+        </form>
+      </div>
+
+      <!-- API KEY — NO-TRANSLATE for the key itself -->
+      <div class="card" id="api">
+        <h2>API access</h2>
+        <p>Use your personal API key to integrate your account with third-party apps and automations.</p>
+        <div style="margin:14px 0">
+          <label>Your API key</label>
+          <div class="api-key-row">
+            <!-- NO-TRANSLATE: the API key value itself should never be translated -->
+            <code data-proxy-notranslate id="api-key">kk_live_4xZ9mQpR8sW2nK7jL1bY3cV6uT0eH5dA</code>
+            <button class="btn btn-outline" onclick="copyApiKey()" aria-label="Copy API key to clipboard">Copy</button>
+            <button class="btn btn-danger" onclick="regenerateKey()" aria-label="Generate a new API key">Regenerate</button>
+          </div>
+          <!-- TRANSLATES: warning text -->
+          <p class="hint" style="margin-top:8px;color:#c62828">⚠️ Keep your API key secret. Do not share it publicly or commit it to version control.</p>
+        </div>
+        <div style="background:#f5f0ee;border-radius:8px;padding:14px;margin-top:10px">
+          <p style="font-size:.87rem;font-weight:600;color:#3e2723;margin-bottom:6px">Example usage:</p>
+          <!-- NO-TRANSLATE: <pre><code> content is never translated -->
+          <pre style="font-size:.82rem;color:#3e2723;overflow-x:auto"><code>curl https://api.kreuzau-kaffee.de/v1/orders \
+  -H "Authorization: Bearer kk_live_4xZ9mQpR8sW2nK7jL1bY3cV6uT0eH5dA"</code></pre>
+        </div>
+      </div>
+
+      <!-- DANGER ZONE — TRANSLATES: warning text. Technical identifiers NOT translated. -->
+      <div class="danger-zone" id="danger">
+        <h2>Danger zone</h2>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+          <div>
+            <strong style="color:#c62828">Delete my account permanently</strong>
+            <p style="margin:4px 0 0;font-size:.88rem">This action cannot be undone. All your order history, loyalty points, and subscription data will be permanently deleted.</p>
+          </div>
+          <button class="btn btn-danger" onclick="confirmDelete()" aria-label="Permanently delete your account">Delete account</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<footer>
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px">
+    <p>© 2025 Kaffeerösterei Kreuzau · <a href="/contact.html">Contact</a> · <a href="/privacy.html">Privacy Policy</a></p>
+  </div>
+</footer>
+
+<!-- NO-TRANSLATE: JS content -->
+<script>
+document.getElementById('profile-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  document.getElementById('succ').textContent = 'Your personal details have been updated successfully.';
+  document.getElementById('succ').style.display = 'block';
+  document.getElementById('err').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+document.getElementById('password-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var pw = document.getElementById('newPassword').value;
+  var cpw = document.getElementById('confirmPassword').value;
+  if (pw !== cpw) {
+    document.getElementById('err').textContent = 'Passwords do not match. Please try again.';
+    document.getElementById('err').style.display = 'block';
+    return;
+  }
+  document.getElementById('succ').textContent = 'Your password has been changed successfully.';
+  document.getElementById('succ').style.display = 'block';
+  document.getElementById('err').style.display = 'none';
+});
+
+document.getElementById('prefs-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  document.getElementById('succ').textContent = 'Your coffee preferences have been saved. We will use these to tailor your future recommendations.';
+  document.getElementById('succ').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+function copyApiKey() {
+  var key = document.getElementById('api-key').textContent;
+  navigator.clipboard.writeText(key).then(function(){ alert('API key copied to clipboard.'); });
+}
+
+function regenerateKey() {
+  if (confirm('Are you sure? Your current API key will stop working immediately.')) {
+    var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+    var key = 'kk_live_';
+    for (var i = 0; i < 32; i++) key += chars[Math.floor(Math.random() * chars.length)];
+    document.getElementById('api-key').textContent = key;
+    alert('A new API key has been generated. Remember to update any integrations that use the old key.');
+  }
+}
+
+function confirmDelete() {
+  if (confirm('This will permanently delete your account and all associated data. This action cannot be undone.\n\nType your email address in the next prompt to confirm.')) {
+    var confirmed = prompt('Type your email address to confirm account deletion:');
+    if (confirmed === 'demo@example.com') {
+      alert('Your account deletion request has been received. Your account will be deleted within 24 hours.');
+    } else {
+      alert('Email address did not match. Account deletion cancelled.');
+    }
+  }
+}
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(function(){});
+}
+</script>
+</body>
+</html>
